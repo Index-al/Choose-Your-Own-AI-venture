@@ -25,13 +25,40 @@ if (apiKey) {
     pageNextChapter.hide();
 }
 
-// Store API key on submission
+// Test API for validity, Store API key on submission
 submitAPI.click(function(event) {
     event.preventDefault();
     apiKey = inputAPI.val();
-    localStorage.setItem('apiKey', apiKey); // sets the API key in localStorage
-    pageAPI.hide(); // hides the form
-    pageStartAdventure.show(); // shows the story start question
+
+    var prompt = 'Test'; // Dummy prompt to ensure API key is working
+
+    fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey
+        },
+        body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [{role: "system", content: prompt}],
+            max_tokens: 25
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            // API key is valid, go ahead and set it to local storage
+            localStorage.setItem('apiKey', apiKey); // sets the API key in localStorage
+            pageAPI.hide(); // hides the form
+            pageStartAdventure.show(); // shows the story start question
+        } else {
+            $('<p style="color:red">API Key is not valid. Please try again.</p>').appendTo(pageAPI); // shows error message, might need to style later
+            inputAPI.val(''); // clears the API input form field
+        }
+    })
+   .catch(error => {
+        console.error('Error:', error);
+        $('<p style="color:red">Something went wrong, please try again</p>').appendTo(pageAPI); // in case something else goes wrong during submission
+   });
 });
 
 // Handle the start of the adventure
