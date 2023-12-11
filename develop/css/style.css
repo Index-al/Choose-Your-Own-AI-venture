@@ -1,14 +1,99 @@
+h1 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+img {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.container {
+  margin-top: 1rem;
+}
+
 /* loading spinner for the image */
 .loading-spinner {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #3498db;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  100% {
+    transform: rotate(360deg);
   }
+}
+
+/* button formatting */
+.btn {
+  margin-top: 1rem;
+  background-color: rgb(5, 132, 228);
+  text-align: center;
+  color: white;
+}
+
+.API-btn {
+  width: 5rem;
+  text-align: center;
+}
+
+/* Enter API formatting */
+.page-api {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.password {
+  margin-top: .75rem;
+  margin-bottom: .75rem;
+}
+
+/* Start adventure formatting */
+.page-start-adventure {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  flex-direction: row;
+}
+
+#page-start-adventure-input {
+  width: 100%;
+}
+
+/* Continue adventure formatting */
+.page-next-chapter div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gpt-text-generation {
+  margin-top: 1rem;
+  width: 75%;
+}
+
+.q2 {
+  margin-top: 1rem;
+}
+
+/*.div-next-chapter {
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}*/
+
+#form-next-chapter {
+  width: 50%;
+  text-align: center;
+}
