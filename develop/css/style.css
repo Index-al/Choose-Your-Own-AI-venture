@@ -6,6 +6,8 @@ h1 {
 img {
   margin-top: 1rem;
   text-align: center;
+  border-radius: 25px;
+  width:50%;
 }
 
 .container {
@@ -59,7 +61,6 @@ img {
 
 /* Start adventure formatting */
 .page-start-adventure {
-  display: flex;
   width: 100%;
   justify-content: center;
   text-align: center;
@@ -75,6 +76,10 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+#page-next-chapter-input {
+  width: 100%;
 }
 
 .gpt-text-generation {
