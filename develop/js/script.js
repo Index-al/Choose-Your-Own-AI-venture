@@ -1,6 +1,6 @@
-
 // Selectors
 var pageAPI = $('.page-api');
+var userPreferences = $('.user-preferences');
 var pageStartAdventure = $('.page-start-adventure');
 var pageNextChapter = $('.page-next-chapter');
 var inputAPI = $('#inputAPI');
@@ -11,15 +11,25 @@ var gptText = $('.gpt-text-generation');
 var dalleImage = $('.dalle-image-generation');
 var loadingSpinner = $('.loading-spinner');
 
-// Initially hide content until API is entered
+// Variables
+var characterName = '';
+var characterJob = '';
+var storyGenre = '';
+var storySetting = '';
+var storyLength = '';
+
+// Initially hide content
 pageStartAdventure.hide();
 pageNextChapter.hide();
+userPreferences.hide();
 
 // Check for API key in localStorage
 var apiKey = localStorage.getItem('apiKey');
 if (apiKey) {
+    console.log("Hiding API key form!");
     pageAPI.hide(); // hide the API key form
-    pageStartAdventure.show(); // show the first page
+    console.log("Key is valid, continuing to next page..");
+    userPreferences.show(); // show the first page
 } else {
     pageStartAdventure.hide(); // if no key present, hide everything and continue to the submit below
     pageNextChapter.hide();
@@ -49,10 +59,14 @@ submitAPI.click(function(event) {
             // API key is valid, go ahead and set it to local storage
             localStorage.setItem('apiKey', apiKey); // sets the API key in localStorage
             pageAPI.hide(); // hides the form
-            pageStartAdventure.show(); // shows the story start question
+            userPreferences.show(); // shows the user preferences form
         } else {
             $('<p style="color:red">API Key is not valid. Please try again.</p>').appendTo(pageAPI); // shows error message, might need to style later
             inputAPI.val(''); // clears the API input form field
+
+            setTimeout(function() {
+                $('p').remove(); // remove the error message after delay
+            }, 2000);
         }
     })
    .catch(error => {
@@ -60,6 +74,24 @@ submitAPI.click(function(event) {
         $('<p style="color:red">Something went wrong, please try again</p>').appendTo(pageAPI); // in case something else goes wrong during submission
    });
 });
+
+// Make sure user preferences are stored in localStorage
+characterName = localStorage.getItem('character');
+characterJob = localStorage.getItem('job');
+storyGenre = localStorage.getItem('genre');
+storySetting = localStorage.getItem('setting');
+storyLength = localStorage.getItem('length');
+
+// Console log user preferences
+console.log("\nUser preferences loaded from localStorage!");
+console.log("Character Name: " + characterName);
+console.log("Character Job: " + characterJob);
+console.log("Story Genre: " + storyGenre);
+console.log("Story Setting: " + storySetting);
+console.log("Story Length: " + storyLength);
+
+// Start the story
+pageStartAdventure.show(); // show the first page
 
 // Handle the start of the adventure
 formStartAdventure.submit(function(event) {
@@ -82,9 +114,9 @@ formNextChapter.submit(function(event) {
 function generateStory(userResponse, isNextChapter) {
     var prompt = isNextChapter ? 
                     `Continue the story: ${userResponse}, second-person creative narrative with dramatic twists, make it about 75 words, use the present tense.` : 
-                    `Start a story with: ${userResponse}, second-person creative narrative with dramatic twists, make it about 75 words, use the present tense.`;
+                    `You are generating a choose-your-own-adventure style story for the user. The user's name is ` + characterName + ` and they are a ` + characterJob + `. The genre of this particular story will be ` + storyGenre + ` and the setting is ` + storySetting + `. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 75 words before giving the user a choice. Use the present tense. Start the story at an appropriate point in the plot taking into consideration the user would like their story to be ` + storyLength + `.`;
 
-    // The gpt text call to Open AI                   
+    // The gpt text call to Open AI
     fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -106,8 +138,8 @@ function generateStory(userResponse, isNextChapter) {
     });
 }
 
- // Function to generate image, using the text from the generated story
- function generateImage(storyText) {
+// Function to generate image, using the text from the generated story
+function generateImage(storyText) {
     dalleImage.hide(); // hide the previous image
     loadingSpinner.show() // show a CSS loading spinner, may want to add "loading image, please wait 10 seconds"
 
@@ -121,7 +153,7 @@ function generateStory(userResponse, isNextChapter) {
         body: JSON.stringify({
             model: 'dall-e-3',
             prompt: storyText,
-            n: 1, // how many images to generate
+            n: 0, // how many images to generate
             size: '1024x1024' // the size of the image, i wonder if a smaller size takes less tokens?
         })
     })
@@ -153,3 +185,33 @@ function typeWriter(text) {
     addWord(); // calls the function to start
 }
 
+// Handle user preferences submission
+$('#submit-preferences').click(function(event) {
+    event.preventDefault();
+    console.log("\nUser preferences submitted!");
+    
+    // Grab user preferences
+    characterName = $('#inputName').val();
+    characterJob = $('#inputJob').val();
+    storyGenre = $('#inputGenre').val();
+    storySetting = $('#inputSetting').val();
+    storyLength = $('#inputLength').val();
+
+    // Console log user preferences
+    console.log("Character Name: " + characterName);
+    console.log("Character Job: " + characterJob);
+    console.log("Story Genre: " + storyGenre);
+    console.log("Story Setting: " + storySetting);
+    console.log("Story Length: " + storyLength);
+    
+    // Store user preferences in localStorage
+    localStorage.setItem('character', characterName);
+    localStorage.setItem('job', characterJob);
+    localStorage.setItem('genre', storyGenre);
+    localStorage.setItem('setting', storySetting);
+    localStorage.setItem('length', storyLength);
+    
+    // Navigate to story.html
+    window.location.href = "../develop/html/story.html";
+
+});

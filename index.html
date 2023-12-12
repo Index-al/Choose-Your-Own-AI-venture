@@ -15,16 +15,84 @@
 <body>
   <main>
     <!-- Main site title -->
-  <h1 style="text-align: center;">Choose Your Own AI-venture</h1>
-
-  <!-- Start button to navigate to user preferences -->
-  <button id="startButton" class="hidden">Start</button>
-
-    <!-- Ask for OpenAI API key since we can't expose one in code -->
+  <h1>Choose Your Own AI-venture</h1>
+  
+  <!-- API key validation section -->
+  <!-- Ask for OpenAI API key since we can't expose one in code -->
     <section class="container page-api">
       <label for="inputAPI">Please provide an OpenAI API key to access this site:</label>
       <input type="password" id="inputAPI" class="form-control">
       <button type="submit" id="submit-api" class="btn btn-primary API-btn">Go</button>
+    </section>
+
+    <!-- User preferences section -->
+    <section class="container user-preferences">
+      <!-- Character name input -->
+      <label for="inputName">Please provide a name for your character:</label>
+      <input type="text" id="inputName" class="form-control" placeholder="Character name">
+      
+      <!-- TODO: Randomly generate user preferences -->
+
+<!-- "Character Job" Options(wizard, knight, thief, peasant, doctor, lawyer, teacher, programmer, engineer, scientist) -->
+      <label for="inputJob">Please select a job for your character:</label>
+      <select id="inputJob" class="form-control">
+        <option value="choose">Choose your job</option>
+        <option value="wizard">Wizard</option>
+        <option value="knight">Knight</option>
+        <option value="thief">Thief</option>
+        <option value="peasant">Peasant</option>
+        <option value="doctor">Doctor</option>
+        <option value="lawyer">Lawyer</option>
+        <option value="teacher">Teacher</option>
+        <option value="programmer">Programmer</option>
+        <option value="engineer">Engineer</option>
+        <option value="scientist">Scientist</option>
+      </select>
+      
+      <!-- "Genre" Options(fantasy, sci-fi, mystery, horror, romance, comedy, drama, action, thriller, western) -->
+      <label for="genre">Genre:</label>
+      <select id="inputGenre" class="form-control">
+        <option value="choose">Choose your genre</option>
+        <option value="fantasy">Fantasy</option>
+        <option value="sci-fi">Sci-Fi</option>
+        <option value="mystery">Mystery</option>
+        <option value="horror">Horror</option>
+        <option value="romance">Romance</option>
+        <option value="comedy">Comedy</option>
+        <option value="drama">Drama</option>
+        <option value="action">Action</option>
+        <option value="thriller">Thriller</option>
+        <option value="western">Western</option>
+      </select>
+
+      <!-- "Setting" Options(spooky forest, abandoned laboratory, outer space, etc.) -->
+      <label for="setting">Setting:</label>
+      <select id="inputSetting" class="form-control">
+        <option value="choose">Choose your setting</option>
+        <option value="spooky-forest">Spooky Forest</option>
+        <option value="abandoned-laboratory">Abandoned Laboratory</option>
+        <option value="outer-space">Outer Space</option>
+        <option value="underwater">Underwater</option>
+        <option value="desert-island">Desert Island</option>
+        <option value="medieval-castle">Medieval Castle</option>
+        <option value="haunted-house">Haunted House</option>
+        <option value="ancient-temple">Ancient Temple</option>
+        <option value="pirate-ship">Pirate Ship</option>
+        <option value="wild-west">Wild West</option>
+      </select>
+
+      <!-- "Story Length" Options(Short, Medium, Long) -->
+      <label for="storyLength">Story Length:</label>
+      <select id="inputLength" class="form-control">
+        <option value="choose">Choose your story length</option>
+        <option value="short">Short</option>
+        <option value="medium">Medium</option>
+        <option value="long">Long</option>
+        <option value="infinite">∞</option>
+      </select>
+
+      <!-- Submit preferences button -->
+      <button type="submit" id="submit-preferences" class="btn btn-primary">Submit</button>
     </section>
   </main>
 
