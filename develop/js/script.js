@@ -1,6 +1,6 @@
 // Selectors
 var pageAPI = $('.page-api');
-var userPreferences = $('.user-preferences');
+var userPreferences = $('.container.user-preferences');
 var pageStartAdventure = $('.page-start-adventure');
 var pageNextChapter = $('.page-next-chapter');
 var inputAPI = $('#inputAPI');
@@ -90,8 +90,6 @@ console.log("Story Genre: " + storyGenre);
 console.log("Story Setting: " + storySetting);
 console.log("Story Length: " + storyLength);
 
-// Start the story
-pageStartAdventure.show(); // show the first page
 
 // Handle the start of the adventure
 formStartAdventure.submit(function(event) {
@@ -100,6 +98,9 @@ formStartAdventure.submit(function(event) {
     var userResponse = $('#page-start-adventure-input').val(); // this is the user response for the first question
     generateStory(userResponse, false); // false indicating it's the first chapter, true means its a looping subsequent chapter function
     $('#page-start-adventure-input').val(''); // Clear the input field
+    // Start the story
+    pageStartAdventure.show(); // show the first page
+    userPreferences.hide(); // hide the user preferences form
 });
 
 // Handle subsequent chapters
@@ -110,8 +111,79 @@ formNextChapter.submit(function(event) {
     $('#page-next-chapter-input').val('');
 });
 
+// Handle user preferences submission
+$('#submit-preferences').click(function(event) {
+    event.preventDefault();
+    console.log("\nUser preferences submitted!");
+    
+    // Grab user preferences
+    characterName = $('#inputName').val();
+    characterJob = $('#inputJob').val();
+    storyGenre = $('#inputGenre').val();
+    storySetting = $('#inputSetting').val();
+    storyLength = $('#inputLength').val();
+
+    // Console log user preferences
+    console.log("Character Name: " + characterName);
+    console.log("Character Job: " + characterJob);
+    console.log("Story Genre: " + storyGenre);
+    console.log("Story Setting: " + storySetting);
+    console.log("Story Length: " + storyLength);
+    
+    // Store user preferences in localStorage
+    localStorage.setItem('character', characterName);
+    localStorage.setItem('job', characterJob);
+    localStorage.setItem('genre', storyGenre);
+    localStorage.setItem('setting', storySetting);
+    localStorage.setItem('length', storyLength);
+    
+    // Call the initial story generation function
+    generateInitialStory();
+
+    // Hide the user preferences form after submission
+    userPreferences.hide();
+
+    // Show the loading spinner and story text
+    pageStartAdventure.show();
+
+    // You might want to show these elements in the generateInitialStory
+    // function after the initial story is generated.
+});
+
+// Function to generate the initial story
+function generateInitialStory() {
+    console.log("\nAttempting to generate initial story text!");
+
+    var prompt = `You are generating a choose-your-own-adventure style story for the user. The user's name is ` + characterName + ` and they are a ` + characterJob + `. The genre of this particular story will be ` + storyGenre + ` and the setting is ` + storySetting + `. Make sure it's a second-person creative narrative using present-tense. Make it about 75 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" `;
+
+    // The gpt text call to Open AI
+    fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey
+        },
+        body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [{role: "system", content: prompt}],
+            max_tokens: 200 
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
+        typeWriter(storyText); // show the response text in the gptText element
+        // You can show other elements here, such as the image or loading spinner
+        generateImage(storyText); // generate the dall-e image function
+        console.log("Initial story text generated!");
+        console.log("Navigating to story!");
+        console.log(data); // for development testing
+    });
+}
+
 // Function to generate story text
 function generateStory(userResponse, isNextChapter) {
+    console.log("Attempting to generate story text!");
     var prompt = isNextChapter ? 
                     `Continue the story: ${userResponse}, second-person creative narrative with dramatic twists, make it about 75 words, use the present tense.` : 
                     `You are generating a choose-your-own-adventure style story for the user. The user's name is ` + characterName + ` and they are a ` + characterJob + `. The genre of this particular story will be ` + storyGenre + ` and the setting is ` + storySetting + `. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 75 words before giving the user a choice. Use the present tense. Start the story at an appropriate point in the plot taking into consideration the user would like their story to be ` + storyLength + `.`;
@@ -179,39 +251,8 @@ function typeWriter(text) {
         if (i < words.length) {
             gptText.append(words[i] + ' '); // Add the next word
             i++;
-            setTimeout(addWord, 200) // let's try 200 milliseconds
+            setTimeout(addWord, 150) // time in ms between words
         }
     }
     addWord(); // calls the function to start
 }
-
-// Handle user preferences submission
-$('#submit-preferences').click(function(event) {
-    event.preventDefault();
-    console.log("\nUser preferences submitted!");
-    
-    // Grab user preferences
-    characterName = $('#inputName').val();
-    characterJob = $('#inputJob').val();
-    storyGenre = $('#inputGenre').val();
-    storySetting = $('#inputSetting').val();
-    storyLength = $('#inputLength').val();
-
-    // Console log user preferences
-    console.log("Character Name: " + characterName);
-    console.log("Character Job: " + characterJob);
-    console.log("Story Genre: " + storyGenre);
-    console.log("Story Setting: " + storySetting);
-    console.log("Story Length: " + storyLength);
-    
-    // Store user preferences in localStorage
-    localStorage.setItem('character', characterName);
-    localStorage.setItem('job', characterJob);
-    localStorage.setItem('genre', storyGenre);
-    localStorage.setItem('setting', storySetting);
-    localStorage.setItem('length', storyLength);
-    
-    // Navigate to story.html
-    window.location.href = "../develop/html/story.html";
-
-});

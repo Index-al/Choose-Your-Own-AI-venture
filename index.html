@@ -15,10 +15,10 @@
 <body>
   <main>
     <!-- Main site title -->
-  <h1>Choose Your Own AI-venture</h1>
+    <h1>Choose Your Own AI-venture</h1>
   
-  <!-- API key validation section -->
-  <!-- Ask for OpenAI API key since we can't expose one in code -->
+    <!-- API key validation section -->
+    <!-- Ask for OpenAI API key since we can't expose one in code -->
     <section class="container page-api">
       <label for="inputAPI">Please provide an OpenAI API key to access this site:</label>
       <input type="password" id="inputAPI" class="form-control">
@@ -33,7 +33,7 @@
       
       <!-- TODO: Randomly generate user preferences -->
 
-<!-- "Character Job" Options(wizard, knight, thief, peasant, doctor, lawyer, teacher, programmer, engineer, scientist) -->
+      <!-- "Character Job" Options(wizard, knight, thief, peasant, doctor, lawyer, teacher, programmer, engineer, scientist) -->
       <label for="inputJob">Please select a job for your character:</label>
       <select id="inputJob" class="form-control">
         <option value="choose">Choose your job</option>
@@ -94,10 +94,37 @@
       <!-- Submit preferences button -->
       <button type="submit" id="submit-preferences" class="btn btn-primary">Submit</button>
     </section>
-  </main>
+    <!-- ... Start adventure ... -->
+    <section class="container page-start-adventure">
+      <div id="page-start-div">
+        <h5 style="font-weight: bold">Your adventure begins..</h5>
+        <p class = "gpt-text-generation"> </p>
+        <div class="loading-spinner"></div>
+        <img class = "dalle-image-generation">
+        
+      </div>
+    </section>
+    
+    <!-- Each Subsequent Page of the Adventure -->
+    <section class="container page-next-chapter">
+      <div>
+        <p class = "gpt-text-generation"> </p>
+        <div class="loading-spinner"></div>
+        <img class = "dalle-image-generation">
+        <p class = "q2" style="font-weight: bold">What do you want to do next?</p>
+        <div class="div-next-chapter">
+          <form id="form-next-chapter">
+            <textarea class="form-control " id="page-next-chapter-input"></textarea>
+            <button type="submit" class="btn btn-primary">Go</button>    
+          </form>
+        </div>
+      </div>
+    </section>
 
-  <!-- Load js files -->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="./develop/js/script.js"></script>
+    <!-- Load js files -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="./develop/js/script.js"></script>
+  </main>
 </body>
 </html>
+  
