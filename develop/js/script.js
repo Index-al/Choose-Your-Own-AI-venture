@@ -1,6 +1,7 @@
 // Consts
 const NUM_PAGES_B4_IMG = 3;
 const PAGES_ENTERED_INIT = 0;
+const NUM_PAGES_B4_CONCLUSION = 10;
 
 // Global variables
 var pagesEntered = PAGES_ENTERED_INIT; // Start incrementing in next chapter
@@ -118,6 +119,11 @@ function generateStory(userResponse, isNextChapter) {
             // Generate image every NUM_PAGES_B4_IMG chapters
             if (!(pagesEntered % NUM_PAGES_B4_IMG)) {
                 generateImage(storyText); // generate the dall-e image function
+            }
+
+            // Start the conclusion?
+            if (pagesEntered === NUM_pages - NUM_PAGES_B4_CONCLUSION) {
+
             }
         });
 }

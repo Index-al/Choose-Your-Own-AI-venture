@@ -85,6 +85,8 @@ img {
 .gpt-text-generation {
   margin-top: 1rem;
   width: 75%;
+  font-size:x-large;
+  font-style:italic; 
 }
 
 .q2 {
