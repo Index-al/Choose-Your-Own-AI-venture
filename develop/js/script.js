@@ -17,6 +17,7 @@ var characterJob = '';
 var storyGenre = '';
 var storySetting = '';
 var storyLength = '';
+var storySoFar = [];
 
 // Initially hide content
 pageStartAdventure.hide();
@@ -35,6 +36,7 @@ if (apiKey) {
     pageNextChapter.hide();
 }
 
+// STEP 1: API key submission
 // Test API for validity, Store API key on submission
 submitAPI.click(function(event) {
     event.preventDefault();
@@ -94,11 +96,21 @@ console.log("Story Length: " + storyLength);
 // Handle the start of the adventure
 formStartAdventure.submit(function(event) {
     event.preventDefault();
-    pageStartAdventure.hide(); // on submit, hide the question and input form
-    var userResponse = $('#page-start-adventure-input').val(); // this is the user response for the first question
-    generateStory(userResponse, false); // false indicating it's the first chapter, true means its a looping subsequent chapter function
-    $('#page-start-adventure-input').val(''); // Clear the input field
-    // Start the story
+    console.log("\nStarting the adventure!");
+
+    // Hide the previous page
+    pageStartAdventure.hide();
+
+    // Grab the user's response to the first question
+    var userResponse = $('#page-start-adventure-input').val();
+
+    // Call the initial story generation function, false indicating it's the first chapter
+    generateStory(userResponse, false);
+
+    // Clear the input field
+    $('#page-start-adventure-input').val('');
+
+    // Show the next page
     pageStartAdventure.show(); // show the first page
     userPreferences.hide(); // hide the user preferences form
 });
@@ -111,6 +123,7 @@ formNextChapter.submit(function(event) {
     $('#page-next-chapter-input').val('');
 });
 
+// STEP 2: User preferences
 // Handle user preferences submission
 $('#submit-preferences').click(function(event) {
     event.preventDefault();
@@ -137,56 +150,29 @@ $('#submit-preferences').click(function(event) {
     localStorage.setItem('setting', storySetting);
     localStorage.setItem('length', storyLength);
     
-    // Call the initial story generation function
-    generateInitialStory();
-
     // Hide the user preferences form after submission
     userPreferences.hide();
-
+    
     // Show the loading spinner and story text
     pageStartAdventure.show();
 
-    // You might want to show these elements in the generateInitialStory
-    // function after the initial story is generated.
+    // Call the initial story generation function
+    generateStory();
 });
 
-// Function to generate the initial story
-function generateInitialStory() {
-    console.log("\nAttempting to generate initial story text!");
-
-    var prompt = `You are generating a choose-your-own-adventure style story for the user. The user's name is ` + characterName + ` and they are a ` + characterJob + `. The genre of this particular story will be ` + storyGenre + ` and the setting is ` + storySetting + `. Make sure it's a second-person creative narrative using present-tense. Make it about 75 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" `;
-
-    // The gpt text call to Open AI
-    fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + apiKey
-        },
-        body: JSON.stringify({
-            model: 'gpt-3.5-turbo',
-            messages: [{role: "system", content: prompt}],
-            max_tokens: 200 
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
-        typeWriter(storyText); // show the response text in the gptText element
-        // You can show other elements here, such as the image or loading spinner
-        generateImage(storyText); // generate the dall-e image function
-        console.log("Initial story text generated!");
-        console.log("Navigating to story!");
-        console.log(data); // for development testing
-    });
-}
+// STEP 3: Story generation
+// Initialize storySoFar array to store the prompts, responses, and user choices
+var storySoFar = [];
 
 // Function to generate story text
 function generateStory(userResponse, isNextChapter) {
     console.log("Attempting to generate story text!");
-    var prompt = isNextChapter ? 
-                    `Continue the story: ${userResponse}, second-person creative narrative with dramatic twists, make it about 75 words, use the present tense.` : 
-                    `You are generating a choose-your-own-adventure style story for the user. The user's name is ` + characterName + ` and they are a ` + characterJob + `. The genre of this particular story will be ` + storyGenre + ` and the setting is ` + storySetting + `. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 75 words before giving the user a choice. Use the present tense. Start the story at an appropriate point in the plot taking into consideration the user would like their story to be ` + storyLength + `.`;
+
+    // Define the prompt based on whether it's the initial story or a subsequent chapter
+    // TODO: Fix the prompt for subsequent chapters to include the storySoFar array
+    var prompt = isNextChapter ?
+        `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. Make sure to use the present tense. Don't go over 90 words before giving the user another choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"` :
+        `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 90 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"`;
 
     // The gpt text call to Open AI
     fetch('https://api.openai.com/v1/chat/completions', {
@@ -197,18 +183,36 @@ function generateStory(userResponse, isNextChapter) {
         },
         body: JSON.stringify({
             model: 'gpt-3.5-turbo',
-            messages: [{role: "system", content: prompt}],
-            max_tokens: 200 
+            messages: [{ role: "system", content: prompt }],
+            max_tokens: 350
         })
     })
     .then(response => response.json())
     .then(data => {
         var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
         typeWriter(storyText); // show the response text in the gptText element
-        pageNextChapter.show(); // show the text on the page
-        generateImage(storyText); // generate the dall-e image function
+
+        // Add the prompt and response to the storySoFar array
+        storySoFar.push({ prompt: prompt, response: storyText, userResponse: userResponse });
+        console.log(storySoFar);
+
+        if (!isNextChapter) {
+            // Show the next page if it's the initial story
+            pageNextChapter.show();
+            pageStartAdventure.hide();
+            generateImage(storyText); // generate the dall-e image function
+        }
     });
+
+    // Hide the previous page if it's not the initial story
+    if (isNextChapter) {
+        pageStartAdventure.hide();
+        pageNextChapter.show();
+    }
 }
+
+
+
 
 // Function to generate image, using the text from the generated story
 function generateImage(storyText) {
