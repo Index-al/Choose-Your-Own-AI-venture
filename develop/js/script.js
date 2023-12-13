@@ -113,7 +113,7 @@ function generateStory(userResponse, isNextChapter) {
         .then(response => response.json())
         .then(data => {
             var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
-            gptText.text(storyText); // show the response text in the gptText element
+            typeWriter(storyText); // show the response text in the gptText element
             pageNextChapter.show(); // show the text on the page
 
             // Generate image every NUM_PAGES_B4_IMG chapters
@@ -160,5 +160,18 @@ function generateImage(storyText) {
         });
 }
 
+function typeWriter(text) {
+    var words = text.split(' '); // Splits the gpt response into individual words
+    var i = 0;
+    gptText.empty(); // clears any existing content
 
+    function addWord() {
+        if (i < words.length) {
+            gptText.append(words[i] + ' '); // Add the next word
+            i++;
+            setTimeout(addWord, 200) // let's try 200 milliseconds
+        }
+    }
+    addWord(); // calls the function to start
+}
 
