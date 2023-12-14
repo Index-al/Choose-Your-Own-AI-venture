@@ -191,7 +191,7 @@ $(document).ready(function () {
         // TODO: Fix the prompt for subsequent chapters to include the storySoFar array
         var prompt = isNextChapter ?
             `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. Make sure to use the present tense. Don't go over 90 words before giving the user another choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"` :
-            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 90 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"`;
+            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 50 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"`;
 
         // The gpt text call to Open AI
         fetch('https://api.openai.com/v1/chat/completions', {
@@ -203,7 +203,7 @@ $(document).ready(function () {
             body: JSON.stringify({
                 model: 'gpt-3.5-turbo',
                 messages: [{ role: "system", content: prompt }],
-                max_tokens: 350
+                max_tokens: 450
             })
         })
             .then(response => response.json())
@@ -249,7 +249,7 @@ $(document).ready(function () {
             body: JSON.stringify({
                 model: 'dall-e-3',
                 prompt: storyText,
-                n: 0, // how many images to generate
+                n: 1, // how many images to generate
                 size: '1024x1024' // the size of the image, i wonder if a smaller size takes less tokens?
             })
         })
