@@ -63,13 +63,10 @@ img {
   border: 5px solid #804000;
   border-top-left-radius: 100px;
   border-top-right-radius: 100px;
-  opacity: 0;
   transition: opacity 1s ease-in;
-}
-
-img.fade-in {
   opacity: 1;
 }
+
 
 .container {
   margin-top: 1rem;
@@ -148,7 +145,7 @@ img.fade-in {
 
 .gpt-text-generation {
   margin-top: 1rem;
-  width: 75%;
+  width: 100%;
   font-size:x-large;
   color: rgb(127, 33, 33);
   font-weight: 600;
@@ -165,9 +162,9 @@ img.fade-in {
 }
 
 #page-next-chapter-input + .btn {
-margin-left: 35%; /* couldn't figure out how else to center the damn button
+margin-left: 35%; /* couldn't figure out how else to center the damn button */
 margin-top: -15px;
-=======
+}
 #form-next-chapter {
   width: 50%;
   text-align: center;

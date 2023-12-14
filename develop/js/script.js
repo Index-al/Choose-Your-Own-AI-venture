@@ -137,6 +137,7 @@ $(document).ready(function () {
         event.preventDefault();
         // Keep track of how many chapters, pages the user has entered
         pagesEntered++;
+        console.log(pagesEntered); // see which page we're on
 
         var userResponse = $('#page-next-chapter-input').val(); // this is the user response for all subsequent questions
         generateStory(userResponse, true); // true indicating it's not the first chapter
@@ -186,12 +187,13 @@ $(document).ready(function () {
     // Function to generate story text
     function generateStory(userResponse, isNextChapter) {
         console.log("Attempting to generate story text!");
+        dalleImage.hide();
 
         // Define the prompt based on whether it's the initial story or a subsequent chapter
         // TODO: Fix the prompt for subsequent chapters to include the storySoFar array
         var prompt = isNextChapter ?
             `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. Make sure to use the present tense. Don't go over 90 words before giving the user another choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"` :
-            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 90 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"`;
+            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 50 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"`;
 
         // The gpt text call to Open AI
         fetch('https://api.openai.com/v1/chat/completions', {
@@ -203,11 +205,12 @@ $(document).ready(function () {
             body: JSON.stringify({
                 model: 'gpt-3.5-turbo',
                 messages: [{ role: "system", content: prompt }],
-                max_tokens: 350
+                max_tokens: 450
             })
         })
             .then(response => response.json())
             .then(data => {
+                dalleImage.hide();
                 var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
                 typeWriter(storyText); // show the response text in the gptText element
 
@@ -215,15 +218,25 @@ $(document).ready(function () {
                 storySoFar.push({ prompt: prompt, response: storyText, userResponse: userResponse });
                 console.log(storySoFar);
 
+                if (!(pagesEntered % NUM_PAGES_B4_IMG)) {
+                    console.log("attempting to generate image");
+                    generateImage(storyText); // generate the dall-e image function
+                    // dalleImage.show();
+                } else {
+                    console.log("not generating an image this time");
+                    console.log("pagesEntered:", pagesEntered);
+                    dalleImage.hide();
+                }
+
                 if (!isNextChapter) {
                     // Show the next page if it's the initial story
                     pageNextChapter.show();
                     pageStartAdventure.hide();
 
                     // Generate image every NUM_PAGES_B4_IMG chapters
-                    if (!(pagesEntered % NUM_PAGES_B4_IMG)) {
-                        generateImage(storyText); // generate the dall-e image function
-                    }
+                    console.log("NUM PAGES B4 IMG: ", NUM_PAGES_B4_IMG)
+                    console.log("pagesEntered: ", pagesEntered)
+
                 }
             });
 
@@ -259,7 +272,9 @@ $(document).ready(function () {
                 loadingSpinner.hide(); // once the image is generated, hide the spinner
                 var imageUrl = data.data[0].url; // this is the image url that we'll feed the img container
                 dalleImage.attr('src', imageUrl); // attaching the image url to the src attribute of this image element
-                dalleImage.show(); // show the image. right now it briefly shows the previous image, so this needs to be fixed
+                setTimeout(function() {
+                    dalleImage.show();
+                }, 1000); // show the image. right now it briefly shows the previous image, so this needs to be fixed
             })
             .catch(error => {
                 console.error('Error:', error);
