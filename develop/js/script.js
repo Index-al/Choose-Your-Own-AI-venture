@@ -137,6 +137,7 @@ $(document).ready(function () {
         event.preventDefault();
         // Keep track of how many chapters, pages the user has entered
         pagesEntered++;
+        console.log(pagesEntered); // see which page we're on
 
         var userResponse = $('#page-next-chapter-input').val(); // this is the user response for all subsequent questions
         generateStory(userResponse, true); // true indicating it's not the first chapter
@@ -215,15 +216,23 @@ $(document).ready(function () {
                 storySoFar.push({ prompt: prompt, response: storyText, userResponse: userResponse });
                 console.log(storySoFar);
 
+                if (!(pagesEntered % NUM_PAGES_B4_IMG)) {
+                    console.log("attempting to generate image");
+                    generateImage(storyText); // generate the dall-e image function
+                } else {
+                    console.log("not generating an image this time");
+                    console.log("pagesEntered:", pagesEntered);
+                }
+
                 if (!isNextChapter) {
                     // Show the next page if it's the initial story
                     pageNextChapter.show();
                     pageStartAdventure.hide();
 
                     // Generate image every NUM_PAGES_B4_IMG chapters
-                    if (!(pagesEntered % NUM_PAGES_B4_IMG)) {
-                        generateImage(storyText); // generate the dall-e image function
-                    }
+                    console.log("NUM PAGES B4 IMG: ", NUM_PAGES_B4_IMG)
+                    console.log("pagesEntered: ", pagesEntered)
+
                 }
             });
 
