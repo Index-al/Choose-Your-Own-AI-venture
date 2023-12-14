@@ -187,6 +187,7 @@ $(document).ready(function () {
     // Function to generate story text
     function generateStory(userResponse, isNextChapter) {
         console.log("Attempting to generate story text!");
+        dalleImage.hide();
 
         // Define the prompt based on whether it's the initial story or a subsequent chapter
         // TODO: Fix the prompt for subsequent chapters to include the storySoFar array
@@ -209,6 +210,7 @@ $(document).ready(function () {
         })
             .then(response => response.json())
             .then(data => {
+                dalleImage.hide();
                 var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
                 typeWriter(storyText); // show the response text in the gptText element
 
@@ -219,9 +221,11 @@ $(document).ready(function () {
                 if (!(pagesEntered % NUM_PAGES_B4_IMG)) {
                     console.log("attempting to generate image");
                     generateImage(storyText); // generate the dall-e image function
+                    // dalleImage.show();
                 } else {
                     console.log("not generating an image this time");
                     console.log("pagesEntered:", pagesEntered);
+                    dalleImage.hide();
                 }
 
                 if (!isNextChapter) {
@@ -268,7 +272,9 @@ $(document).ready(function () {
                 loadingSpinner.hide(); // once the image is generated, hide the spinner
                 var imageUrl = data.data[0].url; // this is the image url that we'll feed the img container
                 dalleImage.attr('src', imageUrl); // attaching the image url to the src attribute of this image element
-                dalleImage.show(); // show the image. right now it briefly shows the previous image, so this needs to be fixed
+                setTimeout(function() {
+                    dalleImage.show();
+                }, 1000); // show the image. right now it briefly shows the previous image, so this needs to be fixed
             })
             .catch(error => {
                 console.error('Error:', error);
