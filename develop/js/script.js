@@ -249,7 +249,7 @@ $(document).ready(function () {
             body: JSON.stringify({
                 model: 'dall-e-3',
                 prompt: storyText,
-                n: 0, // how many images to generate
+                n: 1, // how many images to generate
                 size: '1024x1024' // the size of the image, i wonder if a smaller size takes less tokens?
             })
         })

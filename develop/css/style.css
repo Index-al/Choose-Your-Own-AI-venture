@@ -63,6 +63,12 @@ img {
   border: 5px solid #804000;
   border-top-left-radius: 100px;
   border-top-right-radius: 100px;
+  opacity: 0;
+  transition: opacity 1s ease-in;
+}
+
+img.fade-in {
+  opacity: 1;
 }
 
 .container {
