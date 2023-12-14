@@ -63,7 +63,10 @@ img {
   border: 5px solid #804000;
   border-top-left-radius: 100px;
   border-top-right-radius: 100px;
+  transition: opacity 1s ease-in;
+  opacity: 1;
 }
+
 
 .container {
   margin-top: 1rem;
@@ -142,7 +145,7 @@ img {
 
 .gpt-text-generation {
   margin-top: 1rem;
-  width: 75%;
+  width: 100%;
   font-size:x-large;
   color: rgb(127, 33, 33);
   font-weight: 600;
