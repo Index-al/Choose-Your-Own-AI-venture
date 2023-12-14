@@ -136,9 +136,14 @@ img {
   align-items: center;
 }
 
+#page-next-chapter-input {
+  width: 100%;
+}
+
 .gpt-text-generation {
   margin-top: 1rem;
   width: 75%;
+  font-size:x-large;
   color: rgb(127, 33, 33);
   font-weight: 600;
   font-family: 'choose';
