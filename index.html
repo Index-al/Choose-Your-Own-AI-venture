@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./develop/css/normalize.css">
     <link rel="stylesheet" href="./develop/css/skeleton.css">
     <link rel="stylesheet" href="./develop/css/style.css" />
-    <title>Choose Your Own AI-venture</title>
+    <title>Choose Your Own AIventure</title>
 </head>
 
 <body>
@@ -19,21 +19,21 @@
     <!-- Ask for OpenAI API key since we can't expose one in code -->
     <section class="container page-api">
       <label for="inputAPI">Please provide an OpenAI API key to access this site:</label>
-      <input type="password" id="inputAPI" class="form-control">
+      <input type="password" id="inputAPI">
       <button type="submit" id="submit-api" class="btn btn-primary API-btn">Go</button>
     </section>
 
     <!-- User preferences section -->
     <section class="container user-preferences">
       <!-- Character name input -->
-      <label for="inputName">Please provide a name for your character:</label>
-      <input type="text" id="inputName" class="form-control" placeholder="Character name">
+      <label for="inputName">Provide a name for your character:</label>
+      <input type="text" id="inputName" placeholder="Character name">
       
       <!-- TODO: Randomly generate user preferences -->
 
       <!-- "Character Job" Options(wizard, knight, thief, peasant, doctor, lawyer, teacher, programmer, engineer, scientist) -->
-      <label for="inputJob">Please select a job for your character:</label>
-      <select id="inputJob" class="form-control">
+      <label for="inputJob">Select a role for your character:</label>
+      <select id="inputJob"">
         <option value="choose">Choose your job</option>
         <option value="wizard">Wizard</option>
         <option value="knight">Knight</option>
@@ -48,8 +48,8 @@
       </select>
       
       <!-- "Genre" Options(fantasy, sci-fi, mystery, horror, romance, comedy, drama, action, thriller, western) -->
-      <label for="genre">Genre:</label>
-      <select id="inputGenre" class="form-control">
+      <label for="inputGenre">Story Genre:</label>
+      <select id="inputGenre">
         <option value="choose">Choose your genre</option>
         <option value="fantasy">Fantasy</option>
         <option value="sci-fi">Sci-Fi</option>
@@ -64,8 +64,8 @@
       </select>
 
       <!-- "Setting" Options(spooky forest, abandoned laboratory, outer space, etc.) -->
-      <label for="setting">Setting:</label>
-      <select id="inputSetting" class="form-control">
+      <label for="inputSetting">Story Setting:</label>
+      <select id="inputSetting">
         <option value="choose">Choose your setting</option>
         <option value="spooky-forest">Spooky Forest</option>
         <option value="abandoned-laboratory">Abandoned Laboratory</option>
@@ -80,8 +80,8 @@
       </select>
 
       <!-- "Story Length" Options(Short, Medium, Long) -->
-      <label for="storyLength">Story Length:</label>
-      <select id="inputLength" class="form-control">
+      <label for="inputLength">Story Length:</label>
+      <select id="inputLength">
         <option value="choose">Choose your story length</option>
         <option value="short">Short</option>
         <option value="medium">Medium</option>
@@ -90,7 +90,7 @@
       </select>
 
       <!-- Submit preferences button -->
-      <button type="submit" id="submit-preferences" class="btn btn-primary">Submit</button>
+      <button type="submit" id="submit-preferences" class="btn btn-primary">Begin Adventure</button>
     </section>
     <!-- ... Start adventure ... -->
     <section class="container page-start-adventure">
@@ -102,7 +102,7 @@
         <p class = "q2" style="font-weight: bold">What do you want to do next?</p>
         <div class="div-next-chapter">
           <form id="form-first-chapter">
-            <input type="text" class="form-control " id="page-first-chapter-input">
+            <input type="text" id="page-first-chapter-input">
             <button type="submit" class="btn btn-primary">Go</button>    
           </form>
         </div>
@@ -117,7 +117,7 @@
         <img class = "dalle-image-generation">
         <p class = "q2" style="font-weight: bold">What do you want to do next?</p>
           <form id="form-next-chapter">
-            <input type="text" class="form-control" id="page-next-chapter-input">
+            <input type="text" id="page-next-chapter-input">
             <button type="submit" class="btn btn-primary">Go</button>    
           </form>
       </div>
