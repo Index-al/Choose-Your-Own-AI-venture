@@ -139,6 +139,10 @@ $(document).ready(function () {
     // Handle subsequent chapters
     formNextChapter.submit(function (event) {
         event.preventDefault();
+
+        // Hide the user input form until the next chapter is generated
+        $('#page-next-chapter-input').hide();
+
         // Keep track of how many chapters, prompts the user has entered
         promptsEntered++;
         console.log("after increment");
@@ -156,6 +160,9 @@ $(document).ready(function () {
     $('#submit-preferences').click(function (event) {
         event.preventDefault();
         console.log("\nUser preferences submitted!");
+
+        // Hide the user input form until the next chapter is generated
+        $('#page-next-chapter-input').hide();
 
         // Grab user preferences
         characterName = $('#inputName').val();
@@ -220,16 +227,24 @@ $(document).ready(function () {
     function generateStory(userResponse, isNextChapter) {
         console.log("Attempting to generate story text!");
         dalleImage.hide();
-
+    
+        // Concatenate prompts and responses from storySoFar array
+        var fullStory = "";
+        for (var i = 0; i < storySoFar.length; i++) {
+            fullStory += storySoFar[i].prompt + ' ' + storySoFar[i].response + ' ';
+        }
+    
+        // Append the current user response to the concatenated story
+        fullStory += 'The user chose to: ' + userResponse + '. ';
+    
         // Define the prompt based on whether it's the initial story or a subsequent chapter
-        // TODO: Fix the prompt for subsequent chapters to include the storySoFar array
         var prompt = isNextChapter ?
-            `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. Make sure to use the present tense. Don't go over 90 words before giving the user another choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"` :
-            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 90 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"`;
+            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. Generate between 50 and 100 words before giving the user a choice in the following format: "Do you [run away] or [approach the figure]?` :
+            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 90 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" ${fullStory}`;
 
         // Set up for the last prompt of the story    
         if (promptsEntered === lengthOfStory) {
-            prompt = `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}".  Make sure to use the present tense. This will be the final part of the story! Make sure to generate a grand finale ending! Do not go over 200 words before coming to a conclusion. Remember the genre of the story is ${storyGenre}.`;
+            prompt = `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}".  Make sure to use the present tense. Here is the story so far: ${fullStory}. Continue the story from here. This will be the final part of the story! Make sure to generate a grand finale ending! Do not go over 200 words before coming to a conclusion. Remember the genre of the story is ${storyGenre}. Always end the story with "THE END".`;
             console.log("Attempting to generate the grand finale ending!");
         }
         // The gpt text call to Open AI
@@ -271,7 +286,9 @@ $(document).ready(function () {
 
                 // If this is the last prompt/chapter that we just displayed, clean up and go 
                 // to save and share.
-                if (promptsEntered === lengthOfStory) {
+                console.log("promptsEntered:", promptsEntered, "lengthOfStory:", lengthOfStory);
+                if (promptsEntered == lengthOfStory) {
+                    console.log("Attempting to end story generation & run save and share function!");
                     saveAndShare();
                     return;
                 }
@@ -285,6 +302,9 @@ $(document).ready(function () {
                     console.log("promptsEntered: ", promptsEntered)
 
                 }
+
+                // Show the user input form again
+                $('#page-next-chapter-input').show();
             });
 
         // Hide the previous page if it's not the initial story
