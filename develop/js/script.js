@@ -21,6 +21,7 @@ var formStartAdventure = $('#form-start-adventure');
 var formNextChapter = $('#form-next-chapter');
 var gptText = $('.gpt-text-generation');
 var dalleImage = $('.dalle-image-generation');
+var savesharestartover = $('.savesharestartover');
 var loadingSpinner = $('.loading-spinner');
 
 // Variables
@@ -42,6 +43,7 @@ $(document).ready(function () {
     pageStartAdventure.hide();
     pageNextChapter.hide();
     userPreferences.hide();
+    savesharestartover.hide();
 
     // Check for API key in localStorage
     var apiKey = localStorage.getItem('apiKey');
@@ -154,7 +156,7 @@ $(document).ready(function () {
         $('#page-next-chapter-input').val('');
     });
 
-    // STEP 2: User preferences
+    // STEP 2: User preferences  share-story
     // Handle user preferences submission
     $('#submit-preferences').click(function (event) {
         event.preventDefault();
@@ -181,9 +183,9 @@ $(document).ready(function () {
         localStorage.setItem('setting', storySetting);
         localStorage.setItem('length', storyLength);
 
-// TESTING!!!
-//        testCharacter = characterJob + '&' +storyGenre + '&' +storySetting;
-//        console.log(testCharacter);
+        // TESTING!!!
+        //        testCharacter = characterJob + '&' +storyGenre + '&' +storySetting;
+        //        console.log(testCharacter);
         // Initialize counting variables
         promptsEntered = PROMPTS_ENTERED_INIT;
         switch (storyLength) {
@@ -215,9 +217,27 @@ $(document).ready(function () {
         generateStory("", false);  // false indicating it's the first chapter
     });
 
+    // Handle share-story clicked
+    $('#share-story').click(function (event) {
+        event.preventDefault();
+        console.log("in share story");
+
+
+    });
+    // Handle startover-story clicked
+    $('#startover-story').click(function (event) {
+        event.preventDefault();
+        console.log("in startover story");
+    });
     // FUNCTIONS
     function saveAndShare() {
         console.log("in Save and Share");
+        // Hide ...
+        pageStartAdventure.hide();
+        pageNextChapter.hide();
+        userPreferences.hide();
+        dalleImage.hide();
+        save-share-startover.show();
     }
 
     // STEP 3: Story generation
@@ -316,7 +336,7 @@ $(document).ready(function () {
             body: JSON.stringify({
                 model: 'dall-e-3',
                 prompt: storyText, //testing
- //               prompt: testCharacter,
+                //               prompt: testCharacter,
                 n: 1, // how many images to generate
                 size: '1024x1024' // the size of the image, i wonder if a smaller size takes less tokens?
             })
