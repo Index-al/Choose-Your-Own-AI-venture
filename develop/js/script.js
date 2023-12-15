@@ -5,8 +5,6 @@ var NUM_PROMPTS_SHORT_STORY = 2;
 var NUM_PROMPTS_MEDIUM_STORY = 10;
 var NUM_PROMPTS_LONG_STORY = 15;
 
-var END_THE_STORY = "The grand finale ending."
-
 // Global variables
 var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
 
@@ -227,13 +225,12 @@ $(document).ready(function () {
         // TODO: Fix the prompt for subsequent chapters to include the storySoFar array
         var prompt = isNextChapter ?
             `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. Make sure to use the present tense. Don't go over 90 words before giving the user another choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"` :
-            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 50 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"`;
+            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 90 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"`;
 
         // Set up for the last prompt of the story    
         if (promptsEntered === lengthOfStory) {
-            // Daniel, how do you want to set the prompt for the grand ending?
-            prompt = prompt + END_THE_STORY;
-            console.log("this is the end of the story");
+            prompt = `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}".  Make sure to use the present tense. This will be the final part of the story! Make sure to generate a grand finale ending! Do not go over 200 words before coming to a conclusion. Remember the genre of the story is ${storyGenre}.`;
+            console.log("Attempting to generate the grand finale ending!");
         }
         // The gpt text call to Open AI
         fetch('https://api.openai.com/v1/chat/completions', {
