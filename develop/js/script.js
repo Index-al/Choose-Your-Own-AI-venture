@@ -30,6 +30,7 @@ var storyGenre = '';
 var storySetting = '';
 var storyLength = '';
 var storySoFar = [];// Initialize storySoFar array to store the prompts, responses, and user choices
+var testCharacter = ''; //TESTING
 
 // MAIN - code start
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
@@ -180,6 +181,9 @@ $(document).ready(function () {
         localStorage.setItem('setting', storySetting);
         localStorage.setItem('length', storyLength);
 
+// TESTING!!!
+//        testCharacter = characterJob + '&' +storyGenre + '&' +storySetting;
+//        console.log(testCharacter);
         // Initialize counting variables
         promptsEntered = PROMPTS_ENTERED_INIT;
         switch (storyLength) {
@@ -311,7 +315,8 @@ $(document).ready(function () {
             },
             body: JSON.stringify({
                 model: 'dall-e-3',
-                prompt: storyText,
+                prompt: storyText, //testing
+ //               prompt: testCharacter,
                 n: 1, // how many images to generate
                 size: '1024x1024' // the size of the image, i wonder if a smaller size takes less tokens?
             })
