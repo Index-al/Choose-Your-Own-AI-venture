@@ -251,3 +251,25 @@ label[for="inputLength"] {
 #page-next-chapter-input {
   width:100%;
 }
+
+#page-next-chapter-input + .btn {
+margin-left: 35%;
+margin-top: -15px;
+}
+
+#form-next-chapter {
+  width: 50%;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+p.gpt-text-generation {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 15%;
+  font-size: 16px;
+  text-align: center;
+}
