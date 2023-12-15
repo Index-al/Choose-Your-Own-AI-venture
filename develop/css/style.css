@@ -6,12 +6,15 @@
   font-style: normal;
 }
 
+/* changed the background image and styling so it never runs out */
 body {
-  background-image: url('background.jpg');
-  background-position: center;
-  background-size: 100% 100%;
+  background-image: url('background-xl.jpg');
+  background-position: center center;
+  background-size: cover;
   background-repeat: no-repeat;
-  height: 1500px;
+  background-attachment: fixed;
+  max-height: 100vh;
+  margin: 0;
 
 }
 
@@ -22,7 +25,8 @@ main {
 h1 {
   font-family:'Choose', serif;
   text-transform: uppercase;
-  margin: 50px 20px;
+  margin: 50px auto;
+  max-width: 600px; /* Adjust this to set the maximum width */
   padding: 20px 5px 10px 5px;
   color: white;
   font-size: 3rem;
@@ -35,10 +39,6 @@ p {
   font-size: 1.8rem;
   color: rgb(78, 61, 200);
   margin-bottom: 25px;
-}
-
-.form-control::placeholder {
-  font-style: italic;
 }
 
 label {
@@ -128,6 +128,97 @@ img {
   flex-direction: row;
 }
 
+/* User preferences grid */
+.user-preferences {
+  display: grid;
+  grid-template-columns: 3% 1fr 1fr 3%;
+  row-gap: 5px;
+  column-gap: 40px;
+  align-items: center;
+  font-family: 'choose', serif;
+}
+
+/* centering and narrowing the space on narrower screens  */
+@media screen and (max-width: 870px) {
+  .user-preferences { 
+    column-gap: 10px;
+  }
+}
+
+label[for="inputName"],
+#inputName {
+  grid-column-start: 2;
+}
+
+#inputName {
+  grid-column-start: 2;
+  font-family: sans-serif;
+  color: #999;
+}
+
+#inputName::placeholder {
+  font-family: sans-serif;
+  color: #999;
+}
+
+label[for="inputJob"],
+#inputJob {
+  grid-column-start: 2;
+}
+
+#inputJob {
+  grid-column-start: 2;
+  font-family: sans-serif;
+  color: #999;
+}
+
+label[for="inputGenre"],
+#inputGenre {
+  grid-column-start: 2;
+}
+
+#inputGenre {
+  grid-column-start: 2;
+  font-family: sans-serif;
+  color: #999;
+}
+
+label[for="inputSetting"] {
+  grid-column-start: 3;
+  grid-row-start: 1;
+}
+
+#inputSetting {
+  grid-column-start: 3;
+  grid-row-start: 2;
+  font-family: sans-serif;
+  color: #999;
+}
+
+label[for="inputLength"] {
+  grid-column-start: 3;
+  grid-row-start: 3;
+}
+
+#inputLength {
+  grid-column-start: 3;
+  grid-row-start: 4;
+  font-family: sans-serif;
+  color: #999;
+}
+
+#submit-preferences {
+  margin-top: -5px;
+  font-size: 1.5rem;
+  border-radius: 40px;
+  padding-top: 2px;
+}
+#submit-preferences:hover {
+  background-color: rgb(78, 61, 200);
+  color: white;
+}
+
+
 #page-start-adventure-input {
   width: 100%;
 }
@@ -160,7 +251,3 @@ img {
 #page-next-chapter-input {
   width:100%;
 }
-
-/* #page-next-chapter-input + .btn {
-margin-left: 35%; /* couldn't figure out how else to center the damn button
-} */
