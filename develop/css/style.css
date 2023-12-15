@@ -162,9 +162,9 @@ img {
 }
 
 #page-next-chapter-input + .btn {
-margin-left: 35%; /* couldn't figure out how else to center the damn button
+margin-left: 35%;
 margin-top: -15px;
-=======
+}
 #form-next-chapter {
   width: 50%;
   text-align: center;
