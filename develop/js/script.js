@@ -1,10 +1,14 @@
 // Consts
-const NUM_PAGES_B4_IMG = 3;
-const PAGES_ENTERED_INIT = 0;
-const NUM_PAGES_B4_CONCLUSION = 10;
+var NUM_PROMPTS_B4_IMG = 3;
+var PROMPTS_ENTERED_INIT = 0;
+var NUM_PROMPTS_SHORT_STORY = 2;
+var NUM_PROMPTS_MEDIUM_STORY = 10;
+var NUM_PROMPTS_LONG_STORY = 15;
+
+var END_THE_STORY = "The grand finale ending."
 
 // Global variables
-var pagesEntered = PAGES_ENTERED_INIT; // Start incrementing in next chapter
+var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
 
 // Selectors
 var pageAPI = $('.page-api');
@@ -112,8 +116,8 @@ $(document).ready(function () {
         event.preventDefault();
         console.log("\nStarting the adventure!");
 
-        // Initialize
-        pagesEntered = PAGES_ENTERED_INIT;
+        // Initialize variables
+        promptsEntered = PROMPTS_ENTERED_INIT;
 
         // Hide the previous page
         pageStartAdventure.hide(); // on submit, hide the question and input form
@@ -122,6 +126,8 @@ $(document).ready(function () {
         var userResponse = $('#page-start-adventure-input').val(); // this is the user response for the first question
 
         // Call the initial story generation function, false indicating it's the first chapter
+        console.log("in formstartadventure false");
+        console.log(userResponse);
         generateStory(userResponse, false); // false indicating it's the first chapter, true means its a looping subsequent chapter function
 
         // Clear the input field
@@ -135,11 +141,14 @@ $(document).ready(function () {
     // Handle subsequent chapters
     formNextChapter.submit(function (event) {
         event.preventDefault();
-        // Keep track of how many chapters, pages the user has entered
-        pagesEntered++;
-        console.log(pagesEntered); // see which page we're on
+        // Keep track of how many chapters, prompts the user has entered
+        promptsEntered++;
+        console.log("after increment");
+        console.log(promptsEntered); // see which prompt we're on
 
         var userResponse = $('#page-next-chapter-input').val(); // this is the user response for all subsequent questions
+        console.log("in formnextchapter true");
+        console.log(userResponse);
         generateStory(userResponse, true); // true indicating it's not the first chapter
         $('#page-next-chapter-input').val('');
     });
@@ -171,19 +180,44 @@ $(document).ready(function () {
         localStorage.setItem('setting', storySetting);
         localStorage.setItem('length', storyLength);
 
+        // Initialize counting variables
+        promptsEntered = PROMPTS_ENTERED_INIT;
+        switch (storyLength) {
+            case "short":
+                lengthOfStory = NUM_PROMPTS_SHORT_STORY;
+                break;
+            case "medium":
+                lengthOfStory = NUM_PROMPTS_MEDIUM_STORY;
+                break;
+            case "long":
+                lengthOfStory = NUM_PROMPTS_LONG_STORY;
+                break;
+            default:
+                lengthOfStory = 99;
+                break;
+        }
+        console.log("length of story");
+        console.log(lengthOfStory);
+        console.log(storyLength);
+
         // Hide the user preferences form after submission
         userPreferences.hide();
 
         // Show the loading spinner and story text
         pageStartAdventure.show();
 
-        // Call the initial story generation function
-        generateStory();
+        // Call the initial story generation function after character preferences entered
+        console.log("in submit preferences false");
+        generateStory("", false);  // false indicating it's the first chapter
     });
 
     // FUNCTIONS
+    function saveAndShare() {
+        console.log("in Save and Share");
+    }
+
     // STEP 3: Story generation
-    
+
     // Function to generate story text
     function generateStory(userResponse, isNextChapter) {
         console.log("Attempting to generate story text!");
@@ -195,6 +229,12 @@ $(document).ready(function () {
             `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. Make sure to use the present tense. Don't go over 90 words before giving the user another choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"` :
             `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 50 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?"`;
 
+        // Set up for the last prompt of the story    
+        if (promptsEntered === lengthOfStory) {
+            // Daniel, how do you want to set the prompt for the grand ending?
+            prompt = prompt + END_THE_STORY;
+            console.log("this is the end of the story");
+        }
         // The gpt text call to Open AI
         fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -218,24 +258,34 @@ $(document).ready(function () {
                 storySoFar.push({ prompt: prompt, response: storyText, userResponse: userResponse });
                 console.log(storySoFar);
 
-                if (!(pagesEntered % NUM_PAGES_B4_IMG)) {
+                // If this is time to display an image per the number of prompts we display an image field,
+                // display the image. Otherwise, clear things up so that we see the screen without an image.
+                // Note: this is all dependant on the global variable NUM_PROMPTS_B4_IMG.
+                // We always display an image on the last prompt, the finale.
+                if ((!(promptsEntered % NUM_PROMPTS_B4_IMG)) || (promptsEntered === lengthOfStory)) {
                     console.log("attempting to generate image");
                     generateImage(storyText); // generate the dall-e image function
                     // dalleImage.show();
                 } else {
                     console.log("not generating an image this time");
-                    console.log("pagesEntered:", pagesEntered);
+                    console.log("promptsEntered:", promptsEntered);
                     dalleImage.hide();
                 }
 
+                // If this is the last prompt/chapter that we just displayed, clean up and go 
+                // to save and share.
+                if (promptsEntered === lengthOfStory) {
+                    saveAndShare();
+                    return;
+                }
+                // Show the next page if it's the initial story
                 if (!isNextChapter) {
-                    // Show the next page if it's the initial story
                     pageNextChapter.show();
                     pageStartAdventure.hide();
 
-                    // Generate image every NUM_PAGES_B4_IMG chapters
-                    console.log("NUM PAGES B4 IMG: ", NUM_PAGES_B4_IMG)
-                    console.log("pagesEntered: ", pagesEntered)
+                    // Generate image every NUM_PROMPTS_B4_IMG chapters
+                    console.log("NUM PROMPTS B4 IMG: ", NUM_PROMPTS_B4_IMG)
+                    console.log("promptsEntered: ", promptsEntered)
 
                 }
             });
@@ -272,7 +322,7 @@ $(document).ready(function () {
                 loadingSpinner.hide(); // once the image is generated, hide the spinner
                 var imageUrl = data.data[0].url; // this is the image url that we'll feed the img container
                 dalleImage.attr('src', imageUrl); // attaching the image url to the src attribute of this image element
-                setTimeout(function() {
+                setTimeout(function () {
                     dalleImage.show();
                 }, 1000); // show the image. right now it briefly shows the previous image, so this needs to be fixed
             })
