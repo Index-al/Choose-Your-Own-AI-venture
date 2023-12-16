@@ -5,8 +5,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <!-- Link the stylesheets -->
-    <!-- <link rel="stylesheet" href="./develop/css/normalize.css"> -->
     <link rel="stylesheet" href="./develop/css/skeleton.css">
     <link rel="stylesheet" href="./develop/css/style.css" />
     <title>Choose Your Own AIventure</title>
@@ -17,14 +15,14 @@
   <main>
     <!-- API key validation section -->
     <!-- Ask for OpenAI API key since we can't expose one in code -->
-    <section class="container page-api">
+    <section class="page-api">
       <label for="inputAPI">Please provide an OpenAI API key to access this site:</label>
       <input type="password" id="inputAPI">
       <button type="submit" id="submit-api" class="btn btn-primary API-btn">Go</button>
     </section>
 
     <!-- User preferences section -->
-    <section class="container user-preferences">
+    <section class="user-preferences">
       <!-- Character name input -->
       <label for="inputName">Provide a name for your character:</label>
       <input type="text" id="inputName" placeholder="Character name">
@@ -92,14 +90,15 @@
       <!-- Submit preferences button -->
       <button type="submit" id="submit-preferences" class="btn btn-primary">Begin Adventure</button>
     </section>
+
     <!-- ... Start adventure ... -->
     <section class="page-start-adventure">
       <div id="page-start-div">
         <h5 style="font-weight: bold">Your adventure begins..</h5>
         <p class = "gpt-text-generation"> </p>
       </div>
-    <div class="loading-spinner"></div>
-    <img class = "dalle-image-generation">  
+      <div class="loading-spinner"></div>
+      <img class = "dalle-image-generation">  
     </section>
     
     <!-- Each Subsequent Page of the Adventure -->

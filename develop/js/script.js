@@ -1,5 +1,5 @@
 // Consts
-var NUM_PROMPTS_B4_IMG = 3;
+var NUM_PROMPTS_B4_IMG = 0;
 var PROMPTS_ENTERED_INIT = 0;
 var NUM_PROMPTS_SHORT_STORY = 2;
 var NUM_PROMPTS_MEDIUM_STORY = 10;
@@ -10,7 +10,7 @@ var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
 
 // Selectors
 var pageAPI = $('.page-api');
-var userPreferences = $('.container.user-preferences');
+var userPreferences = $('.user-preferences');
 var pageStartAdventure = $('.page-start-adventure');
 var pageNextChapter = $('.page-next-chapter');
 var inputAPI = $('#inputAPI');
@@ -77,7 +77,7 @@ $(document).ready(function () {
         event.preventDefault();
         apiKey = inputAPI.val();
 
-        var prompt = 'Test'; // Dummy prompt to ensure API key is working
+        var prompt = 'Test'; // Test prompt to ensure API key is working
 
         fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -279,7 +279,7 @@ $(document).ready(function () {
                 'Authorization': 'Bearer ' + apiKey
             },
             body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-3.5-turbo-1106',
                 messages: [{ role: "system", content: prompt }],
                 max_tokens: 450
             })

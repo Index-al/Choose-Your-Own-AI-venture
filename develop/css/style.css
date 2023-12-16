@@ -1,13 +1,14 @@
 /* The official Choose Your Own Adventure font */
 @font-face {
   font-family: 'Choose';
-  src: url('choose.otf') format('opentype');
+  src: url('../fonts/choose.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
+/* book background for wide screens */
 body {
-  background-image: url('background-3-long.jpg');
+  background-image: url('../images/background-wide.jpg');
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -21,7 +22,6 @@ body,
 html {
   overflow: hidden; 
 }
-
 
 main {
   margin-top: 5%;
@@ -59,47 +59,37 @@ label {
   color: white;
 }
 
+/* API page formatting */
 .API-btn {
   width: 5rem;
   text-align: center;
+  padding: 0;
 }
 
-/* Enter API formatting */
+.API-btn:hover {
+  background-color:rgb(78, 61, 200);
+  color: white;
+}
+
 .page-api {
-  text-align: left;
-  display: flex;
-  flex-direction: column;
+  text-align: center;
+  margin: 0 15%;
 }
 
-.password {
+#inputAPI {
   margin-top: .75rem;
   margin-bottom: .75rem;
+  width: 75%;
 }
 
-/* Start adventure formatting */
-.page-start-adventure {
-  display: flex;
-  width: 120%;
-  justify-content: center;
-  text-align: center;
-  flex-direction: row;
-}
-
-/* User preferences grid */
+/* User preferences page */
 .user-preferences {
   display: grid;
-  grid-template-columns: 3% 1fr 1fr 3%;
+  grid-template-columns: 5% 1fr 1fr 5%;
   row-gap: 5px;
-  column-gap: 40px;
+  column-gap: 150px;
   align-items: center;
   font-family: 'choose', serif;
-}
-
-/* centering and narrowing the space on narrower screens  */
-@media screen and (max-width: 870px) {
-  .user-preferences { 
-    column-gap: 10px;
-  }
 }
 
 label[for="inputName"],
@@ -175,16 +165,17 @@ label[for="inputLength"] {
   color: white;
 }
 
-
 #page-start-adventure-input {
   width: 100%;
 }
 
+/* 'Your adventure begins...' */
 #page-start-div h5 {
   color: brown;
   font-family: 'choice', serif;
 }
 
+/* the main results grid on wide screen */
 .page-start-adventure,
 .page-next-chapter {
   margin-top: 1rem;
@@ -201,6 +192,7 @@ label[for="inputLength"] {
   grid-column: 2;
 }
 
+/* the story text */
 .gpt-text-generation {
   margin-top: 2rem;
   width: 100%;
@@ -209,11 +201,6 @@ label[for="inputLength"] {
   font-weight: 600;
   font-family: 'choose';
   margin-bottom: 50px;
-}
-
-#save-share-startover {
-  grid-column: 2;
-  justify-self: center;
 }
 
 /* loading spinner for the image */
@@ -239,13 +226,14 @@ label[for="inputLength"] {
   }
 }
 
+/* image container */
 .dalle-image-generation {
   grid-column: 4;
   grid-row: 1;
   justify-self: center;
 }
 
-
+/* custom border look for the generated image */
 img {
   display: block;
   width: 90%;
@@ -259,7 +247,6 @@ img {
   visibility: hidden;
 }
 
-
 /* Story continuation elements */
 .gpt-text-generation,
 #form-first-chapter {
@@ -272,7 +259,7 @@ img {
   justify-items: center;
 }
 
-
+/* 'What do you want to do next?' */
 .q2 {
   grid-column: 1; 
   margin-top: 1rem;
@@ -280,23 +267,27 @@ img {
   font-weight: 600;
 }
 
-#page-next-chapter-input {
-  width:100%;
-}
-
 #form-next-chapter {
-  width: 50%;
+  width: 70%;
   text-align: center;
   justify-self: center;
+}
+
+#page-next-chapter-input {
+  width: 280px;
 }
 
 .hidden {
   display: none;
 }
 
+/* action items to show at end of story */
 #save-share-startover {
+  grid-column: 2;
+  justify-self: center;
   text-align: center;
   grid-column: 0 / span 3;
+  margin: 30px 0;
 }
 
 #save-story {
@@ -327,11 +318,12 @@ img {
   color: white;
 }
 
+/* Media query for narrower screen */
 @media screen and (max-width: 1400px) {
 
   /* single page background image */
   body {
-    background-image: url('background-4.jpg');
+    background-image: url('../images/background-narrow.jpg');
   }
 
   /* show scrollbar */
@@ -342,13 +334,7 @@ img {
 
   .page-start-adventure,
   .page-next-chapter {
-    margin-top: 1rem;
-    max-width: 90%; /* Max width to fit inside the background book image */
-    margin: auto; 
-    display: grid;
     grid-template-columns: 1fr 5fr 1fr;
-    grid-template-rows: auto;
-    justify-items: center;
   }
   
   .dalle-image-generation,
@@ -362,11 +348,40 @@ img {
     width: 70%;
   }
 
-  #save-share-startover {
-    margin-top: 40px;
-    margin-bottom: 60px;
+  .user-preferences {
+    grid-template-columns: 5% 1fr 5%;
+    row-gap: 5px;
   }
 
+  label[for="inputSetting"] {
+    grid-column-start: 2;
+    grid-row-start: 1;
+  }
 
+  #inputSetting {
+    grid-column-start: 2;
+    grid-row-start: 2;
+  }
 
+  label[for="inputLength"] {
+    grid-column-start: 2;
+    grid-row-start: 3;
+  }
+
+  #inputLength {
+    grid-column-start: 2;
+    grid-row-start: 4;
+  }
+
+  #submit-preferences {
+    grid-column-start: 2;
+    grid-row-start: 15;
+  }
+
+}
+
+@media screen and (max-width: 560px) {
+  .user-preferences {
+    grid-template-columns: 1px 1fr 5%;
+  }
 }
