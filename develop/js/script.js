@@ -1,12 +1,11 @@
 // Consts
 var NUM_PROMPTS_B4_IMG = 3;
 var PROMPTS_ENTERED_INIT = 0;
-var NUM_PROMPTS_SHORT_STORY = 2;
+var NUM_PROMPTS_SHORT_STORY = 1;
 var NUM_PROMPTS_MEDIUM_STORY = 10;
 var NUM_PROMPTS_LONG_STORY = 15;
 
-// Global variables
-var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
+
 
 // Selectors
 var pageAPI = $('.page-api');
@@ -30,6 +29,7 @@ var storySetting = '';
 var storyLength = '';
 var storySoFar = [];// Initialize storySoFar array to store the prompts, responses, and user choices
 var testCharacter = ''; //TESTING
+var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
 
 // MAIN - code start
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
@@ -158,7 +158,7 @@ $(document).ready(function () {
         $('#page-next-chapter-input').val('');
     });
 
-    // STEP 2: User preferences  share-story
+    // STEP 2: User preferences  
     // Handle user preferences submission
     $('#submit-preferences').click(function (event) {
         event.preventDefault();
@@ -226,41 +226,72 @@ $(document).ready(function () {
     $('#share-story').click(function (event) {
         event.preventDefault();
         console.log("in share story");
-
-
     });
+
     // Handle startover-story clicked
     $('#startover-story').click(function (event) {
         event.preventDefault();
         console.log("in startover story");
+        startOver();
     });
+
+    // Handle the save-story clicked
+    $('#save-story').click(function (event) {
+        event.preventDefault();
+        console.log("in save story");
+    });
+
     // FUNCTIONS
+    // Display the story on the screen
+    function showTheStory() {
+        var chapter = "";
+        console.log("storysofar length");
+        console.log(storySoFar.length);
+        for (var i = 0; i < storySoFar.length; i++) {
+            chapter = '<li style="margin-bottom:2rem">' + storySoFar[i].response + '</li>';
+            $('ul#full-story').append(chapter);
+        }
+    }
+
+    function startOver() {
+        // Initially hide content
+        pageStartAdventure.hide();
+        pageNextChapter.hide();
+        userPreferences.hide();
+        pageEndOfStory.hide();
+        userPreferences.show();
+    }
+
+    // When the story is complete, this function sets up the last display and offers a choice
+    // of saving the story, starting over or sharing the story
     function saveAndShare() {
         console.log("in Save and Share");
-        // Hide ...
+        // Initialize the display
         pageStartAdventure.hide();
         pageNextChapter.hide();
         userPreferences.hide();
         dalleImage.hide();
-        save-share-startover.show();
+        pageEndOfStory.show();
+        showTheStory();
     }
 
     // STEP 3: Story generation
-
     // Function to generate story text
     function generateStory(userResponse, isNextChapter) {
         console.log("Attempting to generate story text!");
         dalleImage.hide();
-    
+
         // Concatenate prompts and responses from storySoFar array
         var fullStory = "";
+        console.log("storysofar length in generate story");
+        console.log(storySoFar.length);
         for (var i = 0; i < storySoFar.length; i++) {
             fullStory += storySoFar[i].prompt + ' ' + storySoFar[i].response + ' ';
         }
-    
+
         // Append the current user response to the concatenated story
         fullStory += 'The user chose to: ' + userResponse + '. ';
-    
+
         // Define the prompt based on whether it's the initial story or a subsequent chapter
         var prompt = isNextChapter ?
             `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. Generate between 50 and 100 words before giving the user a choice in the following format: "Do you [run away] or [approach the figure]?` :
@@ -322,7 +353,6 @@ $(document).ready(function () {
                     pageStartAdventure.hide();
 
                     // Generate image every NUM_PROMPTS_B4_IMG chapters
-                    console.log("NUM PROMPTS B4 IMG: ", NUM_PROMPTS_B4_IMG)
                     console.log("promptsEntered: ", promptsEntered)
 
                 }
