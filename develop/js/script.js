@@ -5,8 +5,6 @@ var NUM_PROMPTS_SHORT_STORY = 1;
 var NUM_PROMPTS_MEDIUM_STORY = 10;
 var NUM_PROMPTS_LONG_STORY = 15;
 
-
-
 // Selectors
 var pageAPI = $('.page-api');
 var userPreferences = $('.container.user-preferences');
@@ -28,7 +26,9 @@ var storyGenre = '';
 var storySetting = '';
 var storyLength = '';
 var storySoFar = [];// Initialize storySoFar array to store the prompts, responses, and user choices
-var storyKeys = [];// This array will contain the keys to the stories that have been saved in local storage
+var storyKeysLS = JSON.parse(localStorage.getItem('storyKeys'));//story keys stored in local Storage
+//var storyKeysArr = [];// This array will contain the keys to the stories
+var storedStoryLS = JSON.parse(localStorage.getItem('storyKeys'));// This array will contain the story that is pulled from local storage
 var testCharacter = ''; //TESTING
 var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
 
@@ -245,7 +245,7 @@ $(document).ready(function () {
 
     // FUNCTIONS
     // Display the story on the screen
-    function showTheStory() {
+    function displayTheStory() {
         var chapter = "";
         console.log("storysofar length");
         console.log(storySoFar.length);
@@ -256,12 +256,26 @@ $(document).ready(function () {
     }
 
     function saveStory() {
-        // get new story key
-        var numKeys = localStorage.getItem('length');
-        //localStorage.setItem('numberOfKeys', numKeys);
+        var numKeys = 0;
 
+        // get new story key to point to localStorage
+        storyKeysLS = JSON.parse(localStorage.getItem('storyKeys'));//story keys stored in local Storage
+
+        if (storyKeysLS == null) {
+            numKeys = 0;
+            console.log("in storyKeys null");
+        } else {
+            numKeys = JSON.parse(localStorage.getItem('storyKeys'));
+        }
 
         // pull story from storySoFar and store in new story key local storage
+        var newKey = "Key" + numKeys;
+        console.log("newkey" + newKey);
+        localStorage.setItem(newKey, JSON.stringify(storySoFar));
+        debugger;
+
+        // store the new key into the storyKeys array in local storage
+        //localStorage.setItem('numberOfKeys', numKeys);
 
         // add button to list of saved stories
 
@@ -287,7 +301,7 @@ $(document).ready(function () {
         userPreferences.hide();
         dalleImage.hide();
         pageEndOfStory.show();
-        showTheStory();
+        displayTheStory();
     }
 
     // STEP 3: Story generation
