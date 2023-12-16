@@ -157,20 +157,23 @@
         <p class = "gpt-text-generation"> </p>
         <div class="loading-spinner"></div>
         <img class = "dalle-image-generation">
-        <p class = "q2" style="font-weight: bold">What do you want to do next?</p>
-        <div id="choice-container" class="choice-container">
-          <p>'choice container is displaying | page-next-adventure/'</p>
+        <div class="user-selection">
+          <p class = "q2" style="font-weight: bold" id="question-container">What do you want to do next?</p>
+          <div id="choice-container" class="choice-container">
+            <p>'choice container is displaying | page-next-adventure/'</p>
+          </div>
+          <form id="form-next-chapter">
+              <input type="text" id="page-next-chapter-input">
+              <button type="submit" class="btn btn-primary">Go</button>    
+            </form>
         </div>
-        <form id="form-next-chapter">
-            <input type="text" id="page-next-chapter-input">
-            <button type="submit" class="btn btn-primary">Go</button>    
-          </form>
       </div>
-      <div id="save-share-startover">
+      
+      <!-- <div id="save-share-startover">
       <button type="button" id="save-story"class="btn btn-save">Save Your Story</button>
       <button type="button" id="share-story"class="btn btn-share">Share Your Story</button>
       <button type="button" id="startover-story" class="btn btn-startover">Start Over</button>
-      </div>
+      </div> -->
     </section>
 
 

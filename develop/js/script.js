@@ -21,6 +21,8 @@ var gptText = $('.gpt-text-generation');
 var dalleImage = $('.dalle-image-generation');
 var savesharestartover = $('.savesharestartover');
 var loadingSpinner = $('.loading-spinner');
+var nextChapterInput = $('#page-next-chapter-input');
+var userSelection = $('.user-selection');
 
 // Variables
 var characterName = '';
@@ -42,6 +44,7 @@ $(document).ready(function () {
     pageNextChapter.hide();
     userPreferences.hide();
     savesharestartover.hide();
+    userSelection.hide();
 
     // Check for API key in localStorage
     var apiKey = localStorage.getItem('apiKey');
@@ -53,6 +56,7 @@ $(document).ready(function () {
     } else {
         pageStartAdventure.hide(); // if no key present, hide everything and continue to the submit below
         pageNextChapter.hide();
+
     }
 
     // Make sure user preferences are stored in localStorage
@@ -142,14 +146,14 @@ $(document).ready(function () {
         event.preventDefault();
 
         // Hide the user input form until the next chapter is generated
-        $('#page-next-chapter-input').hide();
+        userSelection.hide();
 
         // Keep track of how many chapters, prompts the user has entered
         promptsEntered++;
 
-        var userResponse = $('#page-next-chapter-input').val(); // this is the user response for all subsequent questions
+        var userResponse = nextChapterInput.val(); // this is the user response for all subsequent questions
         generateStory(userResponse, true); // true indicating it's not the first chapter
-        $('#page-next-chapter-input').val('');
+        nextChapterInput.val('');
     });
 
     // STEP 2: User preferences  share-story
@@ -159,7 +163,7 @@ $(document).ready(function () {
         console.log("\nUser preferences submitted!");
 
         // Hide the user input form until the next chapter is generated
-        $('#page-next-chapter-input').hide();
+        userSelection.hide();
 
         // Grab user preferences
         characterName = $('#inputName').val();
@@ -230,6 +234,7 @@ $(document).ready(function () {
         // Hide ...
         pageStartAdventure.hide();
         pageNextChapter.hide();
+        userSelection.hide();
         userPreferences.hide();
         dalleImage.hide();
         save-share-startover.show();
@@ -267,7 +272,7 @@ $(document).ready(function () {
     function handleChoice(choice) {
         console.log("\nUser choice: ", choice);
         // Set the input field's value to the choice made from the buttons
-        $('#page-next-chapter-input').val(choice);
+        nextChapterInput.val(choice);
     
         // Manually trigger the form submission
         $('#form-next-chapter').submit();
@@ -351,17 +356,22 @@ $(document).ready(function () {
                 // Show the next page if it's the initial story
                 if (!isNextChapter) {
                     pageNextChapter.show();
+                    // Wait until the text is finished typing before showing the user input form
+                    setTimeout(function () {
+                        userSelection.show();
+                    }, 10000);
                     pageStartAdventure.hide();
                 }
-
-                // Show the user input form again
-                $('#page-next-chapter-input').show();
             });
 
         // Hide the previous page if it's not the initial story
         if (isNextChapter) {
             pageStartAdventure.hide();
             pageNextChapter.show();
+            // Wait until the text is finished typing before showing the user input form
+            setTimeout(function () {
+                userSelection.show();
+            }, 10000);
         }
     }
 
