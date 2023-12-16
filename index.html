@@ -158,14 +158,19 @@
         <div class="loading-spinner"></div>
         <img class = "dalle-image-generation">
         <div class="user-selection">
-          <p class = "q2" style="font-weight: bold" id="question-container">What do you want to do next?</p>
+          <p class="q2" style="font-weight: bold" id="question-container">What do you want to do next?</p>
           <div id="choice-container" class="choice-container">
-            <p>'choice container is displaying | page-next-adventure/'</p>
+            <p>Something went wrong with button generation. Please type your response instead below:</p>
           </div>
-          <form id="form-next-chapter">
-              <input type="text" id="page-next-chapter-input">
-              <button type="submit" class="btn btn-primary">Go</button>    
-            </form>
+
+          <!-- Show Form Button -->
+          <button id="show-form-button" class="show-form">Type your own response</button>
+        
+          <!-- Form Next Chapter -->
+          <form id="form-next-chapter" style="display: none;">
+            <input type="text" id="page-next-chapter-input">
+            <button type="submit" class="btn btn-primary">Submit</button>    
+          </form>
         </div>
       </div>
       

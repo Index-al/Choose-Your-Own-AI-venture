@@ -273,3 +273,19 @@ p.gpt-text-generation {
   font-size: 16px;
   text-align: center;
 }
+
+/* Show/hide form button */
+/* Should be only text, minimal, partial transparency */
+.show-form {
+  background-color: transparent;
+  border: none;
+  color: rgb(78, 61, 200);
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 15%;
+  margin-right: 15%;
+  text-align: center;
+  opacity: 0.5;
+  font-size: smaller;
+}

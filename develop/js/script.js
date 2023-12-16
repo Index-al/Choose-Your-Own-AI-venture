@@ -4,6 +4,7 @@ var PROMPTS_ENTERED_INIT = 0;
 var NUM_PROMPTS_SHORT_STORY = 2;
 var NUM_PROMPTS_MEDIUM_STORY = 10;
 var NUM_PROMPTS_LONG_STORY = 15;
+var lengthMultiplier = 27; // Multiplier for the length of the story text to determine the timeout value
 
 // Global variables
 var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
@@ -115,6 +116,11 @@ $(document).ready(function () {
                 $('<p style="color:red">Something went wrong, please try again</p>').appendTo(pageAPI); // in case something else goes wrong during submission
             });
     });
+
+    $('#show-form-button').click(function() {
+        // Toggle the display of the form
+        $('#form-next-chapter').toggle();
+      });
 
     // Handle the start of the adventure
     formStartAdventure.submit(function (event) {
@@ -275,7 +281,7 @@ $(document).ready(function () {
         nextChapterInput.val(choice);
     
         // Manually trigger the form submission
-        $('#form-next-chapter').submit();
+        formNextChapter.submit();
     }
 
     // STEP 3: Story generation
@@ -359,26 +365,45 @@ $(document).ready(function () {
                     // Wait until the text is finished typing before showing the user input form
                     setTimeout(function () {
                         userSelection.show();
-                    }, 10000);
+                    }, storyText.length * lengthMultiplier); // Timeout value based on the length of the response
+
+                    console.log("\nStory character length: ", storyText.length);
+                    // Show timeout length in seconds instead of milliseconds
+                    console.log("Timeout length: ", (storyText.length * lengthMultiplier) / 1000, "seconds");
+
                     pageStartAdventure.hide();
                 }
-            });
 
-        // Hide the previous page if it's not the initial story
-        if (isNextChapter) {
-            pageStartAdventure.hide();
-            pageNextChapter.show();
-            // Wait until the text is finished typing before showing the user input form
-            setTimeout(function () {
-                userSelection.show();
-            }, 10000);
-        }
+                // Hide the previous page if it's not the initial story
+                if (isNextChapter) {
+                    pageStartAdventure.hide();
+                    pageNextChapter.show();
+                    // Wait until the text is finished typing before showing the user input form
+                    setTimeout(function () {
+                        userSelection.show();
+                    }, storyText.length * lengthMultiplier);
+                    console.log("\nStory character length: ", storyText.length);
+                    // Show timeout length in seconds instead of milliseconds
+                    console.log("Timeout length: ", (storyText.length * lengthMultiplier) / 1000, "seconds");
+                }
+            }
+            )
     }
+    
+
 
     // Function to generate image, using the text from the generated story
     function generateImage(storyText) {
         dalleImage.hide(); // hide the previous image
-        loadingSpinner.show() // show a CSS loading spinner, may want to add "loading image, please wait 10 seconds"
+        loadingSpinner.show(); // show a CSS loading spinner, may want to add "loading image, please wait 10 seconds"
+
+        // Modify the story text before sending it to the dall-e API
+        // I'm trying to remove the last sentence of the story so that the image is more relevant
+        var endIndex = storyText.indexOf("Do");
+        if (endIndex !== -1) {
+            storyTextForImg = storyText.substring(0, endIndex);
+            console.log("Story text for image: ", storyTextForImg);
+        }
 
         // the dall-e API call is different than the GPT but uses the same key
         fetch('https://api.openai.com/v1/images/generations', {
@@ -389,8 +414,7 @@ $(document).ready(function () {
             },
             body: JSON.stringify({
                 model: 'dall-e-3',
-                prompt: storyText, //testing
-                //               prompt: testCharacter,
+                prompt: storyTextForImg,
                 n: 1, // how many images to generate
                 size: '1024x1024' // the size of the image, i wonder if a smaller size takes less tokens?
             })
