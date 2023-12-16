@@ -1,5 +1,5 @@
 // Consts
-var NUM_PROMPTS_B4_IMG = 3;
+var NUM_PROMPTS_B4_IMG = 0;
 var PROMPTS_ENTERED_INIT = 0;
 var NUM_PROMPTS_SHORT_STORY = 1;
 var NUM_PROMPTS_MEDIUM_STORY = 10;
@@ -7,7 +7,7 @@ var NUM_PROMPTS_LONG_STORY = 15;
 
 // Selectors
 var pageAPI = $('.page-api');
-var userPreferences = $('.container.user-preferences');
+var userPreferences = $('.user-preferences');
 var pageStartAdventure = $('.page-start-adventure');
 var pageNextChapter = $('.page-next-chapter');
 var pageEndOfStory = $('.page-end-of-story');
@@ -78,7 +78,7 @@ $(document).ready(function () {
         event.preventDefault();
         apiKey = inputAPI.val();
 
-        var prompt = 'Test'; // Dummy prompt to ensure API key is working
+        var prompt = 'Test'; // Test prompt to ensure API key is working
 
         fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -323,8 +323,8 @@ $(document).ready(function () {
 
         // Define the prompt based on whether it's the initial story or a subsequent chapter
         var prompt = isNextChapter ?
-            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. Generate between 50 and 100 words before giving the user a choice in the following format: "Do you [run away] or [approach the figure]?` :
-            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 90 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" ${fullStory}`;
+            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. Generate between 50 and 70 words before giving the user a choice in the following format: "Do you [run away] or [approach the figure]?` :
+            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it between 50 to 70 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" ${fullStory}`;
 
         // Set up for the last prompt of the story    
         if (promptsEntered === lengthOfStory) {
@@ -339,7 +339,7 @@ $(document).ready(function () {
                 'Authorization': 'Bearer ' + apiKey
             },
             body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-3.5-turbo-1106',
                 messages: [{ role: "system", content: prompt }],
                 max_tokens: 450
             })
@@ -425,6 +425,8 @@ $(document).ready(function () {
                 dalleImage.attr('src', imageUrl); // attaching the image url to the src attribute of this image element
                 setTimeout(function () {
                     dalleImage.show();
+                    $('#imageFade').attr('src', imageUrl).on('load', fadeInImage); // fade-in the image
+
                 }, 1000); // show the image. right now it briefly shows the previous image, so this needs to be fixed
             })
             .catch(error => {
@@ -447,3 +449,10 @@ $(document).ready(function () {
         addWord(); // calls the function to start
     }
 })
+
+// image fade-in effect
+function fadeInImage() {
+    $('#imageFade').css('visibility', 'visible').animate({ opacity: 1 }, 1000);
+  }
+
+

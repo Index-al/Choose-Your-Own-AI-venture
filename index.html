@@ -2,14 +2,13 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <!-- Link the stylesheets -->
-  <link rel="stylesheet" href="./develop/css/normalize.css">
-  <link rel="stylesheet" href="./develop/css/skeleton.css">
-  <link rel="stylesheet" href="./develop/css/style.css" />
-  <title>Choose Your Own AIventure</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./develop/css/skeleton.css">
+    <link rel="stylesheet" href="./develop/css/style.css" />
+    <title>Choose Your Own AIventure</title>
 </head>
 
 <body>
@@ -17,14 +16,14 @@
   <main>
     <!-- API key validation section -->
     <!-- Ask for OpenAI API key since we can't expose one in code -->
-    <section class="container page-api">
+    <section class="page-api">
       <label for="inputAPI">Please provide an OpenAI API key to access this site:</label>
       <input type="password" id="inputAPI">
       <button type="submit" id="submit-api" class="btn btn-primary API-btn">Go</button>
     </section>
 
     <!-- User preferences section -->
-    <section class="container user-preferences">
+    <section class="user-preferences">
       <!-- Character name input -->
       <label for="inputName">Provide a name for your character:</label>
       <input type="text" id="inputName" placeholder="Character name">
@@ -33,8 +32,8 @@
 
       <!-- "Character Job" Options(wizard, knight, thief, peasant, doctor, lawyer, teacher, programmer, engineer, scientist) -->
       <label for="inputJob">Select a role for your character:</label>
-      <select id="inputJob"">
-        <option value=" choose">Choose your job</option>
+      <select id="inputJob">
+        <option value="choose">Choose your job</option>
         <option value="wizard">Wizard</option>
         <option value="knight">Knight</option>
         <option value="thief">Thief</option>
@@ -92,35 +91,38 @@
       <!-- Submit preferences button -->
       <button type="submit" id="submit-preferences" class="btn btn-primary">Begin Adventure</button>
     </section>
+
     <!-- ... Start adventure ... -->
-    <section class="container page-start-adventure">
+    <section class="page-start-adventure">
       <div id="page-start-div">
         <h5 style="font-weight: bold">Your adventure begins..</h5>
-        <p class="gpt-text-generation"> </p>
-        <div class="loading-spinner"></div>
-        <img class="dalle-image-generation">
-        <p class="q2" style="font-weight: bold">What do you want to do next?</p>
-        <div class="div-next-chapter">
-          <form id="form-first-chapter">
-            <input type="text" id="page-first-chapter-input">
-            <button type="submit" class="btn btn-primary">Go</button>
-          </form>
-        </div>
+        <p class = "gpt-text-generation"> </p>
+
       </div>
+      <div class="loading-spinner"></div>
+      <img class = "dalle-image-generation">  
     </section>
 
     <!-- Each Subsequent Page of the Adventure -->
-    <section class="container page-next-chapter">
-      <div>
-        <p class="gpt-text-generation"> </p>
-        <div class="loading-spinner"></div>
-        <img class="dalle-image-generation">
-        <p class="q2" style="font-weight: bold">What do you want to do next?</p>
-        <form id="form-next-chapter">
-          <input type="text" id="page-next-chapter-input">
-          <button type="submit" class="btn btn-primary">Go</button>
-        </form>
+    <section class="page-next-chapter">
+      <div id="page-continue-div">
+        <p class = "gpt-text-generation"> </p>
+        <div class="story-continue-questions">
+        <p class = "q2">What do you want to do next?</p>
+          <form id="form-next-chapter">
+            <input type="text" id="page-next-chapter-input">
+            <button type="submit" class="btn btn-primary">Go</button>    
+          </form>
+        </div>  
+      </div>  
+      <div id="save-share-startover">
+        <button type="button" id="save-story"class="btn btn-save">Save Story</button>
+        <button type="button" id="share-story"class="btn btn-share">Share Story</button>
+        <button type="button" id="startover-story" class="btn btn-startover">Start Over</button>
+
       </div>
+      <div class="loading-spinner"></div>
+      <img id= "imageFade" class = "dalle-image-generation">  
     </section>
 
     <!-- The end of the adventure-->
