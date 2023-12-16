@@ -366,6 +366,8 @@ $(document).ready(function () {
                 dalleImage.attr('src', imageUrl); // attaching the image url to the src attribute of this image element
                 setTimeout(function () {
                     dalleImage.show();
+                    $('#imageFade').attr('src', imageUrl).on('load', fadeInImage); // fade-in the image
+
                 }, 1000); // show the image. right now it briefly shows the previous image, so this needs to be fixed
             })
             .catch(error => {
@@ -388,3 +390,10 @@ $(document).ready(function () {
         addWord(); // calls the function to start
     }
 })
+
+// image fade-in effect
+function fadeInImage() {
+    $('#imageFade').css('visibility', 'visible').animate({ opacity: 1 }, 1000);
+  }
+
+
