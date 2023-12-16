@@ -13,13 +13,13 @@ var pageAPI = $('.page-api');
 var userPreferences = $('.container.user-preferences');
 var pageStartAdventure = $('.page-start-adventure');
 var pageNextChapter = $('.page-next-chapter');
+var pageEndOfStory = $('.page-end-of-story');
 var inputAPI = $('#inputAPI');
 var submitAPI = $('#submit-api');
 var formStartAdventure = $('#form-start-adventure');
 var formNextChapter = $('#form-next-chapter');
 var gptText = $('.gpt-text-generation');
 var dalleImage = $('.dalle-image-generation');
-var savesharestartover = $('.savesharestartover');
 var loadingSpinner = $('.loading-spinner');
 
 // Variables
@@ -41,7 +41,7 @@ $(document).ready(function () {
     pageStartAdventure.hide();
     pageNextChapter.hide();
     userPreferences.hide();
-    savesharestartover.hide();
+    pageEndOfStory.hide();
 
     // Check for API key in localStorage
     var apiKey = localStorage.getItem('apiKey');

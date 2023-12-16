@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <!-- Link the stylesheets -->
-    <link rel="stylesheet" href="./develop/css/normalize.css">
-    <link rel="stylesheet" href="./develop/css/skeleton.css">
-    <link rel="stylesheet" href="./develop/css/style.css" />
-    <title>Choose Your Own AIventure</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <!-- Link the stylesheets -->
+  <link rel="stylesheet" href="./develop/css/normalize.css">
+  <link rel="stylesheet" href="./develop/css/skeleton.css">
+  <link rel="stylesheet" href="./develop/css/style.css" />
+  <title>Choose Your Own AIventure</title>
 </head>
 
 <body>
@@ -28,13 +28,13 @@
       <!-- Character name input -->
       <label for="inputName">Provide a name for your character:</label>
       <input type="text" id="inputName" placeholder="Character name">
-      
+
       <!-- TODO: Randomly generate user preferences -->
 
       <!-- "Character Job" Options(wizard, knight, thief, peasant, doctor, lawyer, teacher, programmer, engineer, scientist) -->
       <label for="inputJob">Select a role for your character:</label>
       <select id="inputJob"">
-        <option value="choose">Choose your job</option>
+        <option value=" choose">Choose your job</option>
         <option value="wizard">Wizard</option>
         <option value="knight">Knight</option>
         <option value="thief">Thief</option>
@@ -46,7 +46,7 @@
         <option value="engineer">Engineer</option>
         <option value="scientist">Scientist</option>
       </select>
-      
+
       <!-- "Genre" Options(fantasy, sci-fi, mystery, horror, romance, comedy, drama, action, thriller, western) -->
       <label for="inputGenre">Story Genre:</label>
       <select id="inputGenre">
@@ -96,43 +96,46 @@
     <section class="container page-start-adventure">
       <div id="page-start-div">
         <h5 style="font-weight: bold">Your adventure begins..</h5>
-        <p class = "gpt-text-generation"> </p>
+        <p class="gpt-text-generation"> </p>
         <div class="loading-spinner"></div>
-        <img class = "dalle-image-generation">
-        <p class = "q2" style="font-weight: bold">What do you want to do next?</p>
+        <img class="dalle-image-generation">
+        <p class="q2" style="font-weight: bold">What do you want to do next?</p>
         <div class="div-next-chapter">
           <form id="form-first-chapter">
             <input type="text" id="page-first-chapter-input">
-            <button type="submit" class="btn btn-primary">Go</button>    
+            <button type="submit" class="btn btn-primary">Go</button>
           </form>
         </div>
       </div>
     </section>
-    
+
     <!-- Each Subsequent Page of the Adventure -->
     <section class="container page-next-chapter">
       <div>
-        <p class = "gpt-text-generation"> </p>
+        <p class="gpt-text-generation"> </p>
         <div class="loading-spinner"></div>
-        <img class = "dalle-image-generation">
-        <p class = "q2" style="font-weight: bold">What do you want to do next?</p>
-          <form id="form-next-chapter">
-            <input type="text" id="page-next-chapter-input">
-            <button type="submit" class="btn btn-primary">Go</button>    
-          </form>
-      </div>
-      <div id="save-share-startover">
-      <button type="button" id="save-story"class="btn btn-save">Save Your Story</button>
-      <button type="button" id="share-story"class="btn btn-share">Share Your Story</button>
-      <button type="button" id="startover-story" class="btn btn-startover">Start Over</button>
+        <img class="dalle-image-generation">
+        <p class="q2" style="font-weight: bold">What do you want to do next?</p>
+        <form id="form-next-chapter">
+          <input type="text" id="page-next-chapter-input">
+          <button type="submit" class="btn btn-primary">Go</button>
+        </form>
       </div>
     </section>
 
+    <!-- The end of the adventure-->
+    <section class="container page-end-of-story" id="save-share-startover">
+      <div>
+        <button type="button" id="save-story" class="btn btn-save">Save Your Story</button>
+        <button type="button" id="share-story" class="btn btn-share">Share Your Story</button>
+        <button type="button" id="startover-story" class="btn btn-startover">Start Over</button>
+      </div>
+    </section>
 
     <!-- Load js files -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="./develop/js/script.js"></script>
   </main>
 </body>
+
 </html>
-  
