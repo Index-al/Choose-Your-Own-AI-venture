@@ -28,6 +28,7 @@ var storyGenre = '';
 var storySetting = '';
 var storyLength = '';
 var storySoFar = [];// Initialize storySoFar array to store the prompts, responses, and user choices
+var storyKeys = [];// This array will contain the keys to the stories that have been saved in local storage
 var testCharacter = ''; //TESTING
 var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
 
@@ -239,6 +240,7 @@ $(document).ready(function () {
     $('#save-story').click(function (event) {
         event.preventDefault();
         console.log("in save story");
+        saveStory();
     });
 
     // FUNCTIONS
@@ -251,6 +253,19 @@ $(document).ready(function () {
             chapter = '<li style="margin-bottom:2rem">' + storySoFar[i].response + '</li>';
             $('ul#full-story').append(chapter);
         }
+    }
+
+    function saveStory() {
+        // get new story key
+        var numKeys = localStorage.getItem('length');
+        //localStorage.setItem('numberOfKeys', numKeys);
+
+
+        // pull story from storySoFar and store in new story key local storage
+
+        // add button to list of saved stories
+
+        // show the story with save, share, start over buttons page
     }
 
     function startOver() {
