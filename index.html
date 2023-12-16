@@ -21,15 +21,12 @@
       <input type="password" id="inputAPI">
       <button type="submit" id="submit-api" class="btn btn-primary API-btn">Go</button>
     </section>
-
+    
     <!-- User preferences section -->
     <section class="user-preferences">
-      <!-- Character name input -->
-      <label for="inputName">Provide a name for your character:</label>
-      <input type="text" id="inputName" placeholder="Character name">
-
+      
       <!-- TODO: Randomly generate user preferences -->
-
+      
       <!-- "Character Role" Options -->
       <label for="inputJob">Select a role for your character:</label>
       <select id="inputJob">
@@ -68,6 +65,26 @@
         <option value="king">King</option>
         <option value="queen">Queen</option>
       </select>
+
+      <!-- "Setting" Options(spooky forest, abandoned laboratory, outer space, etc.) -->
+      <label for="inputSetting">Story Setting:</label>
+      <select id="inputSetting">
+        <option value="choose">Choose your setting</option>
+        <option value="random">Random</option>
+        <option value=""></option>
+        <option value="spooky-forest">Spooky Forest</option>
+        <option value="abandoned-laboratory">Abandoned Laboratory</option>
+        <option value="outer-space">Outer Space</option>
+        <option value="underwater">Underwater</option>
+        <option value="desert-island">Desert Island</option>
+        <option value="medieval-castle">Medieval Castle</option>
+        <option value="haunted-house">Haunted House</option>
+        <option value="ancient-temple">Ancient Temple</option>
+        <option value="pirate-ship">Pirate Ship</option>
+        <option value="wild-west">Wild West</option>
+        <option value="futuristic-city">Futuristic City</option>
+        <option value="cyberspace">Cyberspace</option>
+      </select>
       
       <!-- "Genre" Options -->
       <label for="inputGenre">Story Genre:</label>
@@ -102,27 +119,12 @@
         <option value="slice-of-life">Slice of Life</option>
         <option value="realistic-fiction">Realistic Fiction</option>
       </select>
+      
 
-      <!-- "Setting" Options(spooky forest, abandoned laboratory, outer space, etc.) -->
-      <label for="inputSetting">Story Setting:</label>
-      <select id="inputSetting">
-        <option value="choose">Choose your setting</option>
-        <option value="random">Random</option>
-        <option value=""></option>
-        <option value="spooky-forest">Spooky Forest</option>
-        <option value="abandoned-laboratory">Abandoned Laboratory</option>
-        <option value="outer-space">Outer Space</option>
-        <option value="underwater">Underwater</option>
-        <option value="desert-island">Desert Island</option>
-        <option value="medieval-castle">Medieval Castle</option>
-        <option value="haunted-house">Haunted House</option>
-        <option value="ancient-temple">Ancient Temple</option>
-        <option value="pirate-ship">Pirate Ship</option>
-        <option value="wild-west">Wild West</option>
-        <option value="futuristic-city">Futuristic City</option>
-        <option value="cyberspace">Cyberspace</option>
-      </select>
-
+      <!-- Character name input -->
+      <label for="inputName">Provide a name for your character:</label>
+      <input type="text" id="inputName" placeholder="Character name">
+      
       <!-- "Story Length" Options(Short, Medium, Long) -->
       <label for="inputLength">Story Length:</label>
       <select id="inputLength">
