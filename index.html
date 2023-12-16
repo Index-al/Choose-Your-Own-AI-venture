@@ -2,11 +2,10 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <!-- Link the stylesheets -->
-    <link rel="stylesheet" href="./develop/css/normalize.css">
     <link rel="stylesheet" href="./develop/css/skeleton.css">
     <link rel="stylesheet" href="./develop/css/style.css" />
     <title>Choose Your Own AI-venture</title>
@@ -17,18 +16,18 @@
   <main>
     <!-- API key validation section -->
     <!-- Ask for OpenAI API key since we can't expose one in code -->
-    <section class="container page-api">
+    <section class="page-api">
       <label for="inputAPI">Please provide an OpenAI API key to access this site:</label>
       <input type="password" id="inputAPI">
       <button type="submit" id="submit-api" class="btn btn-primary API-btn">Go</button>
     </section>
 
     <!-- User preferences section -->
-    <section class="container user-preferences">
+    <section class="user-preferences">
       <!-- Character name input -->
       <label for="inputName">Provide a name for your character:</label>
       <input type="text" id="inputName" placeholder="Character name">
-      
+
       <!-- TODO: Randomly generate user preferences -->
 
       <!-- "Character Role" Options -->
@@ -139,8 +138,9 @@
       <!-- Submit preferences button -->
       <button type="submit" id="submit-preferences" class="btn btn-primary">Begin Adventure</button>
     </section>
+
     <!-- ... Start adventure ... -->
-    <section class="container page-start-adventure">
+    <section class="page-start-adventure">
       <div id="page-start-div">
         <h5 style="font-weight: bold">Your adventure begins..</h5>
         <p class = "gpt-text-generation"> </p>
@@ -149,11 +149,13 @@
         <div class="div-next-chapter">
         </div>
       </div>
+      <div class="loading-spinner"></div>
+      <img class = "dalle-image-generation">  
     </section>
-    
+
     <!-- Each Subsequent Page of the Adventure -->
-    <section class="container page-next-chapter">
-      <div>
+    <section class="page-next-chapter">
+      <div id="page-continue-div">
         <p class = "gpt-text-generation"> </p>
         <div class="loading-spinner"></div>
         <img class = "dalle-image-generation">
@@ -171,21 +173,35 @@
             <input type="text" id="page-next-chapter-input">
             <button type="submit" class="btn btn-primary">Submit</button>    
           </form>
-        </div>
+        </div>  
+      </div>  
+      <div id="save-share-startover">
+        <button type="button" id="save-story"class="btn btn-save">Save Story</button>
+        <button type="button" id="share-story"class="btn btn-share">Share Story</button>
+        <button type="button" id="startover-story" class="btn btn-startover">Start Over</button>
+
       </div>
-      
-      <!-- <div id="save-share-startover">
-      <button type="button" id="save-story"class="btn btn-save">Save Your Story</button>
-      <button type="button" id="share-story"class="btn btn-share">Share Your Story</button>
-      <button type="button" id="startover-story" class="btn btn-startover">Start Over</button>
-      </div> -->
+      <div class="loading-spinner"></div>
+      <img id= "imageFade" class = "dalle-image-generation">  
     </section>
 
+    <!-- The end of the adventure-->
+    <section class="container page-end-of-story" id="save-share-startover">
+      <div>
+        <!-- ul used to display the story on the page before the buttons -->
+        <ul id="full-story">
+ 
+        </ul>
+        <button type="button" id="save-story" class="btn btn-save">Save Your Story</button>
+        <button type="button" id="share-story" class="btn btn-share">Share Your Story</button>
+        <button type="button" id="startover-story" class="btn btn-startover">Start Over</button>
+      </div>
+    </section>
 
     <!-- Load js files -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="./develop/js/script.js"></script>
   </main>
 </body>
+
 </html>
-  

@@ -1,26 +1,23 @@
 // Consts
-var NUM_PROMPTS_B4_IMG = 3;
+var NUM_PROMPTS_B4_IMG = 0;
 var PROMPTS_ENTERED_INIT = 0;
-var NUM_PROMPTS_SHORT_STORY = 2;
+var NUM_PROMPTS_SHORT_STORY = 1;
 var NUM_PROMPTS_MEDIUM_STORY = 10;
 var NUM_PROMPTS_LONG_STORY = 15;
 var lengthMultiplier = 27; // Multiplier for the length of the story text to determine the timeout value
 
-// Global variables
-var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
-
 // Selectors
 var pageAPI = $('.page-api');
-var userPreferences = $('.container.user-preferences');
+var userPreferences = $('.user-preferences');
 var pageStartAdventure = $('.page-start-adventure');
 var pageNextChapter = $('.page-next-chapter');
+var pageEndOfStory = $('.page-end-of-story');
 var inputAPI = $('#inputAPI');
 var submitAPI = $('#submit-api');
 var formStartAdventure = $('#form-start-adventure');
 var formNextChapter = $('#form-next-chapter');
 var gptText = $('.gpt-text-generation');
 var dalleImage = $('.dalle-image-generation');
-var savesharestartover = $('.savesharestartover');
 var loadingSpinner = $('.loading-spinner');
 var nextChapterInput = $('#page-next-chapter-input');
 var userSelection = $('.user-selection');
@@ -33,6 +30,7 @@ var storySetting = '';
 var storyLength = '';
 var storySoFar = [];// Initialize storySoFar array to store the prompts, responses, and user choices
 var testCharacter = ''; //TESTING
+var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
 
 // MAIN - code start
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
@@ -44,7 +42,7 @@ $(document).ready(function () {
     pageStartAdventure.hide();
     pageNextChapter.hide();
     userPreferences.hide();
-    savesharestartover.hide();
+    pageEndOfStory.hide();
     userSelection.hide();
 
     // Check for API key in localStorage
@@ -82,7 +80,7 @@ $(document).ready(function () {
         event.preventDefault();
         apiKey = inputAPI.val();
 
-        var prompt = 'Test'; // Dummy prompt to ensure API key is working
+        var prompt = 'Test'; // Test prompt to ensure API key is working
 
         fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -162,7 +160,7 @@ $(document).ready(function () {
         nextChapterInput.val('');
     });
 
-    // STEP 2: User preferences  share-story
+    // STEP 2: User preferences  
     // Handle user preferences submission
     $('#submit-preferences').click(function (event) {
         event.preventDefault();
@@ -226,24 +224,92 @@ $(document).ready(function () {
     $('#share-story').click(function (event) {
         event.preventDefault();
         console.log("in share story");
-
-
     });
+
     // Handle startover-story clicked
     $('#startover-story').click(function (event) {
         event.preventDefault();
         console.log("in startover story");
+        startOver();
     });
+
+    // Handle the save-story clicked
+    $('#save-story').click(function (event) {
+        event.preventDefault();
+        console.log("in save story");
+    });
+
     // FUNCTIONS
+    // Display the story on the screen
+    function showTheStory() {
+        var chapter = "";
+        console.log("storysofar length");
+        console.log(storySoFar.length);
+        for (var i = 0; i < storySoFar.length; i++) {
+            chapter = '<li style="margin-bottom:2rem">' + storySoFar[i].response + '</li>';
+            $('ul#full-story').append(chapter);
+        }
+    }
+
+    function startOver() {
+        // Initially hide content
+        pageStartAdventure.hide();
+        pageNextChapter.hide();
+        userPreferences.hide();
+        pageEndOfStory.hide();
+        userPreferences.show();
+    }
+
+    // When the story is complete, this function sets up the last display and offers a choice
+    // of saving the story, starting over or sharing the story
     function saveAndShare() {
         console.log("in Save and Share");
-        // Hide ...
+        // Initialize the display
         pageStartAdventure.hide();
         pageNextChapter.hide();
         userSelection.hide();
         userPreferences.hide();
         dalleImage.hide();
-        save-share-startover.show();
+        pageEndOfStory.show();
+        showTheStory();
+    }
+
+    // Function to extract choices from the story text and display buttons
+    function parseAndDisplayChoices(storyText) {
+        var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
+        if (choices) {
+            choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
+            displayChoiceButtons(choices); // Display choice buttons
+        }
+    }
+
+    // Function to create and display choice buttons
+    function displayChoiceButtons(choices) {
+        var $container = $('#choice-container'); // Selector for the container
+        $container.empty(); // Clear existing content
+        choices.forEach(choice => {
+            var $button = $('<button></button>'); // Create a button element
+            $button.text(choice);
+            $button.addClass('choice-button');
+
+            // Display console log with each choice in the array
+            console.log("Option " + (choices.indexOf(choice) + 1) + ": " + choice);
+
+            $button.on('click', function() { // Add event listener
+                handleChoice(choice);
+            });
+            $container.append($button); // Append button to container
+        });
+    }
+    
+    // Function to handle the user's choice from the buttons
+    function handleChoice(choice) {
+        console.log("\nUser choice: ", choice);
+        // Set the input field's value to the choice made from the buttons
+        nextChapterInput.val(choice);
+    
+        // Manually trigger the form submission
+        formNextChapter.submit();
     }
 
     // Function to extract choices from the story text and display buttons
@@ -285,21 +351,22 @@ $(document).ready(function () {
     }
 
     // STEP 3: Story generation
-
     // Function to generate story text
     function generateStory(userResponse, isNextChapter) {
         console.log("\nAttempting to generate story text!");
         dalleImage.hide();
-    
+
         // Concatenate prompts and responses from storySoFar array
         var fullStory = "";
+        console.log("storysofar length in generate story");
+        console.log(storySoFar.length);
         for (var i = 0; i < storySoFar.length; i++) {
             fullStory += storySoFar[i].prompt + ' ' + storySoFar[i].response + ' ';
         }
-    
+
         // Append the current user response to the concatenated story
         fullStory += 'The user chose to: ' + userResponse + '. ';
-    
+
         // Define the prompt based on whether it's the initial story or a subsequent chapter
         var prompt = isNextChapter ?
             `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. IMPORTANT: Generate between 50 and 100 words before giving the user a choice in EXACTLY the following format: "Do you [run away] or [approach the figure]?" The user's options MUST be in brackets.` :
@@ -318,6 +385,7 @@ $(document).ready(function () {
                 'Authorization': 'Bearer ' + apiKey
             },
             body: JSON.stringify({
+                model: 'gpt-3.5-turbo-1106',
                 model: 'gpt-3.5-turbo-1106',
                 messages: [{ role: "system", content: prompt }],
                 max_tokens: 450
@@ -427,6 +495,8 @@ $(document).ready(function () {
                 dalleImage.attr('src', imageUrl); // attaching the image url to the src attribute of this image element
                 setTimeout(function () {
                     dalleImage.show();
+                    $('#imageFade').attr('src', imageUrl).on('load', fadeInImage); // fade-in the image
+
                 }, 1000); // show the image. right now it briefly shows the previous image, so this needs to be fixed
             })
             .catch(error => {
@@ -449,3 +519,10 @@ $(document).ready(function () {
         addWord(); // calls the function to start
     }
 })
+
+// image fade-in effect
+function fadeInImage() {
+    $('#imageFade').css('visibility', 'visible').animate({ opacity: 1 }, 1000);
+  }
+
+
