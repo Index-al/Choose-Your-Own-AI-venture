@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="./develop/css/normalize.css">
     <link rel="stylesheet" href="./develop/css/skeleton.css">
     <link rel="stylesheet" href="./develop/css/style.css" />
-    <title>Choose Your Own AIventure</title>
+    <title>Choose Your Own AI-venture</title>
 </head>
 
 <body>
-  <h1 class="text-center">Choose Your Own AIventure</h1>
+  <h1 class="text-center">Choose Your Own AI-venture</h1>
   <main>
     <!-- API key validation section -->
     <!-- Ask for OpenAI API key since we can't expose one in code -->
@@ -31,10 +31,15 @@
       
       <!-- TODO: Randomly generate user preferences -->
 
-      <!-- "Character Job" Options(wizard, knight, thief, peasant, doctor, lawyer, teacher, programmer, engineer, scientist) -->
+      <!-- "Character Role" Options -->
       <label for="inputJob">Select a role for your character:</label>
-      <select id="inputJob"">
-        <option value="choose">Choose your job</option>
+      <select id="inputJob">
+        <option value="choose">Choose your role</option>
+        <option value="random">Random</option>
+        <option value=""></option>
+        <option value="student">Student</option>
+        <option value="archer">Archer</option>
+        <option value="warrior">Warrior</option>
         <option value="wizard">Wizard</option>
         <option value="knight">Knight</option>
         <option value="thief">Thief</option>
@@ -45,12 +50,32 @@
         <option value="programmer">Programmer</option>
         <option value="engineer">Engineer</option>
         <option value="scientist">Scientist</option>
+        <option value="astronaut">Astronaut</option>
+        <option value="pilot">Pilot</option>
+        <option value="detective">Detective</option>
+        <option value="spy">Spy</option>
+        <option value="ninja">Ninja</option>
+        <option value="pirate">Pirate</option>
+        <option value="vampire">Vampire</option>
+        <option value="werewolf">Werewolf</option>
+        <option value="zombie">Zombie</option>
+        <option value="ghost">Ghost</option>
+        <option value="alien">Alien</option>
+        <option value="robot">Robot</option>
+        <option value="superhero">Superhero</option>
+        <option value="villain">Villain</option>
+        <option value="princess">Princess</option>
+        <option value="prince">Prince</option>
+        <option value="king">King</option>
+        <option value="queen">Queen</option>
       </select>
       
-      <!-- "Genre" Options(fantasy, sci-fi, mystery, horror, romance, comedy, drama, action, thriller, western) -->
+      <!-- "Genre" Options -->
       <label for="inputGenre">Story Genre:</label>
       <select id="inputGenre">
         <option value="choose">Choose your genre</option>
+        <option value="random">Random</option>
+        <option value=""></option>
         <option value="fantasy">Fantasy</option>
         <option value="sci-fi">Sci-Fi</option>
         <option value="mystery">Mystery</option>
@@ -61,12 +86,30 @@
         <option value="action">Action</option>
         <option value="thriller">Thriller</option>
         <option value="western">Western</option>
+        <option value="historical">Historical</option>
+        <option value="adventure">Adventure</option>
+        <option value="fairy-tale">Fairy Tale</option>
+        <option value="mythology">Mythology</option>
+        <option value="superhero">Superhero</option>
+        <option value="post-apocalyptic">Post-Apocalyptic</option>
+        <option value="cyberpunk">Cyberpunk</option>
+        <option value="steampunk">Steampunk</option>
+        <option value="alternate-history">Alternate History</option>
+        <option value="alternate-universe">Alternate Universe</option>
+        <option value="time-travel">Time Travel</option>
+        <option value="space-opera">Space Opera</option>
+        <option value="military">Military</option>
+        <option value="sports">Sports</option>
+        <option value="slice-of-life">Slice of Life</option>
+        <option value="realistic-fiction">Realistic Fiction</option>
       </select>
 
       <!-- "Setting" Options(spooky forest, abandoned laboratory, outer space, etc.) -->
       <label for="inputSetting">Story Setting:</label>
       <select id="inputSetting">
         <option value="choose">Choose your setting</option>
+        <option value="random">Random</option>
+        <option value=""></option>
         <option value="spooky-forest">Spooky Forest</option>
         <option value="abandoned-laboratory">Abandoned Laboratory</option>
         <option value="outer-space">Outer Space</option>
@@ -77,12 +120,16 @@
         <option value="ancient-temple">Ancient Temple</option>
         <option value="pirate-ship">Pirate Ship</option>
         <option value="wild-west">Wild West</option>
+        <option value="futuristic-city">Futuristic City</option>
+        <option value="cyberspace">Cyberspace</option>
       </select>
 
       <!-- "Story Length" Options(Short, Medium, Long) -->
       <label for="inputLength">Story Length:</label>
       <select id="inputLength">
         <option value="choose">Choose your story length</option>
+        <option value="random">Random</option>
+        <option value=""></option>
         <option value="short">Short</option>
         <option value="medium">Medium</option>
         <option value="long">Long</option>
@@ -99,12 +146,7 @@
         <p class = "gpt-text-generation"> </p>
         <div class="loading-spinner"></div>
         <img class = "dalle-image-generation">
-        <p class = "q2" style="font-weight: bold">What do you want to do next?</p>
         <div class="div-next-chapter">
-          <form id="form-first-chapter">
-            <input type="text" id="page-first-chapter-input">
-            <button type="submit" class="btn btn-primary">Go</button>    
-          </form>
         </div>
       </div>
     </section>
@@ -116,7 +158,10 @@
         <div class="loading-spinner"></div>
         <img class = "dalle-image-generation">
         <p class = "q2" style="font-weight: bold">What do you want to do next?</p>
-          <form id="form-next-chapter">
+        <div id="choice-container" class="choice-container">
+          <p>'choice container is displaying | page-next-adventure/'</p>
+        </div>
+        <form id="form-next-chapter">
             <input type="text" id="page-next-chapter-input">
             <button type="submit" class="btn btn-primary">Go</button>    
           </form>
