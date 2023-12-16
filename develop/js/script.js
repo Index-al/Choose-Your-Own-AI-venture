@@ -263,8 +263,8 @@ $(document).ready(function () {
     
         // Define the prompt based on whether it's the initial story or a subsequent chapter
         var prompt = isNextChapter ?
-            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. Generate between 50 and 100 words before giving the user a choice in the following format: "Do you [run away] or [approach the figure]?` :
-            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it about 90 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" ${fullStory}`;
+            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. Generate between 50 and 70 words before giving the user a choice in the following format: "Do you [run away] or [approach the figure]?` :
+            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it between 50 to 70 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" ${fullStory}`;
 
         // Set up for the last prompt of the story    
         if (promptsEntered === lengthOfStory) {
