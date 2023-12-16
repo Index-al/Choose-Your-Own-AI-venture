@@ -31,7 +31,7 @@ h1 {
   font-family:'Choose', serif;
   text-transform: uppercase;
   margin: 50px auto;
-  max-width: 600px; /* Adjust this to set the maximum width */
+  max-width: 600px;
   padding: 20px 5px 10px 5px;
   color: white;
   font-size: 3rem;
@@ -49,19 +49,6 @@ p {
 label {
   font-weight: 600;
 }
-
-/* .dalle-image-generation {
-  width: 75%;
-} */
-
-/* .adventure-border {
-  display: inline-flex;
-  border-top-left-radius: 100px;
-  border-top-right-radius: 100px;
-} */
-
-
-
 
 /* button formatting */
 .btn {
@@ -193,17 +180,11 @@ label[for="inputLength"] {
   width: 100%;
 }
 
-/* Continue adventure formatting */
-/* setting up the book grid view */
-/* .container {
-  max-width: 1920px;
-} */
-
 .page-start-adventure,
 .page-next-chapter {
   margin-top: 1rem;
   max-width: 90%; /* Max width to fit inside the background book image */
-  margin: auto; /* Center the grid */
+  margin: auto; 
   display: grid;
   grid-template-columns: 1fr 4fr 2fr 4fr 1fr;
   grid-template-rows: auto;
@@ -213,11 +194,6 @@ label[for="inputLength"] {
 #page-start-div,
 #page-continue-div {
   grid-column: 2;
-}
-
-
-#page-next-chapter-input {
-  /* width: 100%; */
 }
 
 .gpt-text-generation {
