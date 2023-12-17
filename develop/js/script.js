@@ -1,4 +1,4 @@
-// Consts
+// Constant values
 var NUM_PROMPTS_B4_IMG = 3;
 var PROMPTS_ENTERED_INIT = 0;
 var NUM_PROMPTS_SHORT_STORY = 5;
@@ -71,7 +71,6 @@ $(document).ready(function () {
     storySetting = localStorage.getItem('setting');
     storyLength = localStorage.getItem('length');
 
-    // BUTTON/CLICK PROCESSING
     // STEP 1: API key submission
     // Test API for validity, Store API key on submission
     submitAPI.click(function (event) {
@@ -113,6 +112,7 @@ $(document).ready(function () {
             });
     });
 
+    // Process when a user types their own response
     $('#show-form-button').click(function () {
         // Toggle the display of the form
         $('#form-next-chapter').toggle();
@@ -143,7 +143,7 @@ $(document).ready(function () {
         userPreferences.hide(); // hide the user preferences form   
     });
 
-    // Handle subsequent chapters
+    // Handle subsequent chapters (submit button was clicked)
     formNextChapter.submit(function (event) {
         event.preventDefault();
 
@@ -175,6 +175,25 @@ $(document).ready(function () {
         storyLength = $('#inputLength').val();
 
         // Console log user preferences
+        if (characterName === "") {
+            characterName = "Rand";
+        }
+        
+        if (characterJob === "choose") {
+            characterJob = "Hero";
+        }
+ 
+        if (storyGenre === "choose") {
+            storyGenre = "Adventure"
+        }
+ 
+        if (storySetting === "choose") {
+            storySetting = "castle";
+        }
+ 
+        if (storyLength === "choose") {
+            storyLength = "short";
+        }
         console.log("Character Name: " + characterName);
         console.log("Character Job: " + characterJob);
         console.log("Story Genre: " + storyGenre);
@@ -187,10 +206,7 @@ $(document).ready(function () {
         localStorage.setItem('genre', storyGenre);
         localStorage.setItem('setting', storySetting);
         localStorage.setItem('length', storyLength);
-        //debugger;
-        // TESTING!!!
-        //        testCharacter = characterJob + '&' +storyGenre + '&' +storySetting;
-        //        console.log(testCharacter);
+  
         // Initialize counting variables
         promptsEntered = PROMPTS_ENTERED_INIT;
         switch (storyLength) {
@@ -238,7 +254,6 @@ $(document).ready(function () {
         saveStory();
     });
 
-    // FUNCTIONS
     // Display the story on the screen
     function showTheStory() {
         var chapter = "";
@@ -248,7 +263,7 @@ $(document).ready(function () {
         }
     }
 
-    // save the current story in local storage
+    // save the current story in local storage; each story gets a unique key
     function saveStory() {
         var numKeys = 0;
         var newKey = "Key" + numKeys;
@@ -271,7 +286,6 @@ $(document).ready(function () {
         // pull story from storySoFar and store in new story key local storage
         console.log("newkey" + newKey);
         console.log("newKey" + numKeys.length);
-        // debugger;
         localStorage.setItem(newKey, JSON.stringify(storySoFar));
 
         // store the new key into the storyKeys array in local storage
@@ -280,19 +294,11 @@ $(document).ready(function () {
 
         localStorage.setItem('storyKeys', JSON.stringify(storyKeysArr));
 
-        // add button to list of saved stories
-
+        // add button to list of saved stories would go here
     }
 
     function startOver() {
-        // Initially hide content
-        // pageStartAdventure.hide();
-        // pageNextChapter.hide();
-        // userPreferences.hide();
-        // pageEndOfStory.hide();
-        // userPreferences.show();
-
-        // Refresh storySoFar
+         // Refresh storySoFar
         for (var i = 0; i < storySoFar.length; i++) {
             storySoFar.pop();
         }
@@ -301,6 +307,7 @@ $(document).ready(function () {
 
     // When the story is complete, this function sets up the last display and offers a choice
     // of saving the story, starting over or sharing the story
+    // To be implemented with Save button
     // function saveAndShare() {
     //     console.log("in Save and Share");
     //     // Initialize the display
