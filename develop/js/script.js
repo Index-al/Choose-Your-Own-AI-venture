@@ -1,9 +1,9 @@
 // Consts
-var NUM_PROMPTS_B4_IMG = 5;
+var NUM_PROMPTS_B4_IMG = 3;
 var PROMPTS_ENTERED_INIT = 0;
-var NUM_PROMPTS_SHORT_STORY = 1;
-var NUM_PROMPTS_MEDIUM_STORY = 10;
-var NUM_PROMPTS_LONG_STORY = 15;
+var NUM_PROMPTS_SHORT_STORY = 5;
+var NUM_PROMPTS_MEDIUM_STORY = 15;
+var NUM_PROMPTS_LONG_STORY = 45;
 var lengthMultiplier = 26; // Multiplier for the length of the story text to determine the timeout value
 var endingChance = 0.5; // Chance of a bad ending (0.5 = 50% chance)
 
@@ -353,7 +353,7 @@ $(document).ready(function () {
 
     // Function to determine if the story context is risky
     function isRiskySituation(userResponse) {
-    var riskyKeywords = ['explore', 'investigate', 'confront', 'challenge', 'battle', 'attack', 'fight', 'approach', 'follow', 'pursue', 'chase', 'hunt', 'stalk', 'track', 'search', 'look for', 'look around', 'look into', 'shield', 'defend', 'protect', 'guard', 'rescue', 'save', 'help', 'sneak', 'face the', 'stand up to', 'stand your ground', 'monster', 'creature', 'beast', 'villain', 'enemy', 'danger', 'threat', 'risk', 'peril', 'hazard', 'unsafe', 'rush', 'run', 'deadly', 'dangerous', 'risky', 'unsafe', 'harmful', 'hazardous', 'perilous', 'treacherous', 'tricky', 'dicey', 'chancy', 'touchy', 'battle', 'engage'];
+    var riskyKeywords = ['explore', 'investigate', 'confront', 'challenge', 'battle', 'attack', 'fight', 'approach', 'follow', 'pursue', 'chase', 'hunt', 'stalk', 'track', 'search', 'look for', 'look around', 'look into', 'shield', 'defend', 'protect', 'guard', 'rescue', 'save', 'help', 'sneak', 'face the', 'stand up to', 'stand your ground', 'monster', 'creature', 'beast', 'villain', 'enemy', 'danger', 'threat', 'risk', 'peril', 'hazard', 'unsafe', 'rush', 'run', 'deadly', 'dangerous', 'risky', 'unsafe', 'harmful', 'hazardous', 'perilous', 'treacherous', 'tricky', 'dicey', 'chancy', 'touchy', 'battle', 'engage', 'contain', 'yourself'];
     // Console log if isRiskySituation is true
     console.log("Is risky situation: ", riskyKeywords.some(keyword => userResponse.includes(keyword)));
     return riskyKeywords.some(keyword => userResponse.includes(keyword));
