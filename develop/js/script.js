@@ -192,7 +192,7 @@ $(document).ready(function () {
         localStorage.setItem('genre', storyGenre);
         localStorage.setItem('setting', storySetting);
         localStorage.setItem('length', storyLength);
-debugger;
+//debugger;
         // TESTING!!!
         //        testCharacter = characterJob + '&' +storyGenre + '&' +storySetting;
         //        console.log(testCharacter);
@@ -251,7 +251,7 @@ debugger;
         console.log(storySoFar.length);
         for (var i = 0; i < storySoFar.length; i++) {
             chapter = '<li style="margin-bottom:2rem">' + storySoFar[i].response + '</li>';
-            $('ul#full-story').append(chapter);
+            $('ul#story-contents').append(chapter);
         }
     }
 
@@ -273,12 +273,12 @@ debugger;
         var newKey = "Key" + numKeys;
         console.log("newkey" + newKey);
         localStorage.setItem(newKey, JSON.stringify(storySoFar));
-        debugger;
+        //debugger;
 
         // store the new key into the storyKeys array in local storage
         storyKeysLS[numKeys] = newKey;
         console.log(storyKeys);
-        debugger;
+        //debugger;
         localStorage.setItem('storyKeys', numKeys);
 
         // add button to list of saved stories
@@ -512,7 +512,7 @@ debugger;
                 dalleImage.hide();
                 var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
                 typeWriter(storyText); // show the response text in the gptText element
-debugger;
+//debugger;
                 // Parse the story text for choices and display buttons
                 parseAndDisplayChoices(storyText);
 
@@ -573,9 +573,7 @@ debugger;
             }
             )
     }
-    
-
-
+ 
     // Function to generate image, using the text from the generated story
     function generateImage(storyText) {
         dalleImage.hide(); // hide the previous image
