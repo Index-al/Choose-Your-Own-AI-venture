@@ -145,8 +145,6 @@
     <section class="page-start-adventure">
       <div id="page-start-div">
         <h5 style="font-weight: bold">Your adventure begins..</h5>
-        <p class = "gpt-text-generation"> </p>
-        <div class="loading-spinner"></div>
         <img class = "dalle-image-generation">
         <div class="div-next-chapter">
         </div>
@@ -159,10 +157,8 @@
     <section class="page-next-chapter">
       <div id="page-continue-div">
         <p class = "gpt-text-generation"> </p>
-        <div class="loading-spinner"></div>
-        <img class = "dalle-image-generation">
         <div class="user-selection">
-          <p class="q2" style="font-weight: bold" id="question-container">What do you want to do next?</p>
+          <p class="q2" id="question-container">What do you want to do next?</p>
           <div id="choice-container" class="choice-container">
             <p>Something went wrong with button generation. Please type your response instead below:</p>
           </div>
@@ -182,11 +178,9 @@
     </section>
 
     <!-- The end of the adventure-->
-    <section class="container page-end-of-story" id="save-share-startover">
-      <div>
-        <!-- ul isused to display the story on the page before the buttons -->
-        <ul id="story-contents">
-        </ul>
+    <section class="page-end-of-story">
+        <p id="story-contents">
+      <div id="save-share-startover"  
         <button type="button" id="save-story" class="btn btn-save">Save Your Story</button>
         <button type="button" id="share-story" class="btn btn-share">Share Your Story</button>
         <button type="button" id="startover-story" class="btn btn-startover">Start Over</button>

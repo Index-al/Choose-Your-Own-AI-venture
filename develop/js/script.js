@@ -285,16 +285,17 @@ $(document).ready(function () {
 
     function startOver() {
         // Initially hide content
-        pageStartAdventure.hide();
-        pageNextChapter.hide();
-        userPreferences.hide();
-        pageEndOfStory.hide();
-        userPreferences.show();
+        // pageStartAdventure.hide();
+        // pageNextChapter.hide();
+        // userPreferences.hide();
+        // pageEndOfStory.hide();
+        // userPreferences.show();
 
         // Refresh storySoFar
         for (var i = 0; i < storySoFar.length; i++) {
             storySoFar.pop();
         }
+        location.reload();
     }
 
     // When the story is complete, this function sets up the last display and offers a choice
@@ -385,7 +386,6 @@ $(document).ready(function () {
             },
             body: JSON.stringify({
                 model: 'gpt-3.5-turbo-1106',
-                model: 'gpt-3.5-turbo-1106',
                 messages: [{ role: "system", content: prompt }],
                 max_tokens: 450
             })
@@ -422,7 +422,9 @@ $(document).ready(function () {
                 // to save and share.
                 console.log("\nOptions chosen: ", promptsEntered, "Max options chosen: ", lengthOfStory);
                 if (promptsEntered == lengthOfStory) {
+                    pageNextChapter.show();
                     console.log("\nAttempting to end story generation & run save and share function!");
+
                     saveAndShare();
                     return;
                 }
