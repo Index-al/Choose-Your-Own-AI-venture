@@ -338,11 +338,13 @@ img {
   margin-right: 25px;
   text-align: center;
   background-color: green;
+  display:none;
 }
 
 #share-story {
   text-align: center;
   background-color: rgb(78, 61, 200);
+  display:none;
 }
 
 #startover-story {
