@@ -4,8 +4,7 @@ var PROMPTS_ENTERED_INIT = 0;
 var NUM_PROMPTS_SHORT_STORY = 1;
 var NUM_PROMPTS_MEDIUM_STORY = 10;
 var NUM_PROMPTS_LONG_STORY = 15;
-
-
+var lengthMultiplier = 27; // Multiplier for the length of the story text to determine the timeout value
 
 // Selectors
 var pageAPI = $('.page-api');
@@ -20,6 +19,8 @@ var formNextChapter = $('#form-next-chapter');
 var gptText = $('.gpt-text-generation');
 var dalleImage = $('.dalle-image-generation');
 var loadingSpinner = $('.loading-spinner');
+var nextChapterInput = $('#page-next-chapter-input');
+var userSelection = $('.user-selection');
 
 // Variables
 var characterName = '';
@@ -42,6 +43,7 @@ $(document).ready(function () {
     pageNextChapter.hide();
     userPreferences.hide();
     pageEndOfStory.hide();
+    userSelection.hide();
 
     // Check for API key in localStorage
     var apiKey = localStorage.getItem('apiKey');
@@ -53,6 +55,7 @@ $(document).ready(function () {
     } else {
         pageStartAdventure.hide(); // if no key present, hide everything and continue to the submit below
         pageNextChapter.hide();
+
     }
 
     // Make sure user preferences are stored in localStorage
@@ -63,12 +66,12 @@ $(document).ready(function () {
     storyLength = localStorage.getItem('length');
 
     // Console log user preferences
-    console.log("\nUser preferences loaded from localStorage!");
-    console.log("Character Name: " + characterName);
-    console.log("Character Job: " + characterJob);
-    console.log("Story Genre: " + storyGenre);
-    console.log("Story Setting: " + storySetting);
-    console.log("Story Length: " + storyLength);
+    // console.log("\nUser preferences loaded from localStorage!");
+    // console.log("Character Name: " + characterName);
+    // console.log("Character Job: " + characterJob);
+    // console.log("Story Genre: " + storyGenre);
+    // console.log("Story Setting: " + storySetting);
+    // console.log("Story Length: " + storyLength);
 
     // BUTTON/CLICK PROCESSING
     // STEP 1: API key submission
@@ -86,7 +89,7 @@ $(document).ready(function () {
                 'Authorization': 'Bearer ' + apiKey
             },
             body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-3.5-turbo-1106',
                 messages: [{ role: "system", content: prompt }],
                 max_tokens: 25
             })
@@ -112,6 +115,11 @@ $(document).ready(function () {
             });
     });
 
+    $('#show-form-button').click(function() {
+        // Toggle the display of the form
+        $('#form-next-chapter').toggle();
+      });
+
     // Handle the start of the adventure
     formStartAdventure.submit(function (event) {
         event.preventDefault();
@@ -127,8 +135,6 @@ $(document).ready(function () {
         var userResponse = $('#page-start-adventure-input').val(); // this is the user response for the first question
 
         // Call the initial story generation function, false indicating it's the first chapter
-        console.log("in formstartadventure false");
-        console.log(userResponse);
         generateStory(userResponse, false); // false indicating it's the first chapter, true means its a looping subsequent chapter function
 
         // Clear the input field
@@ -144,18 +150,14 @@ $(document).ready(function () {
         event.preventDefault();
 
         // Hide the user input form until the next chapter is generated
-        $('#page-next-chapter-input').hide();
+        userSelection.hide();
 
         // Keep track of how many chapters, prompts the user has entered
         promptsEntered++;
-        console.log("after increment");
-        console.log(promptsEntered); // see which prompt we're on
 
-        var userResponse = $('#page-next-chapter-input').val(); // this is the user response for all subsequent questions
-        console.log("in formnextchapter true");
-        console.log(userResponse);
+        var userResponse = nextChapterInput.val(); // this is the user response for all subsequent questions
         generateStory(userResponse, true); // true indicating it's not the first chapter
-        $('#page-next-chapter-input').val('');
+        nextChapterInput.val('');
     });
 
     // STEP 2: User preferences  
@@ -165,7 +167,7 @@ $(document).ready(function () {
         console.log("\nUser preferences submitted!");
 
         // Hide the user input form until the next chapter is generated
-        $('#page-next-chapter-input').hide();
+        userSelection.hide();
 
         // Grab user preferences
         characterName = $('#inputName').val();
@@ -207,9 +209,6 @@ $(document).ready(function () {
                 lengthOfStory = 99;
                 break;
         }
-        console.log("length of story");
-        console.log(lengthOfStory);
-        console.log(storyLength);
 
         // Hide the user preferences form after submission
         userPreferences.hide();
@@ -218,7 +217,6 @@ $(document).ready(function () {
         pageStartAdventure.show();
 
         // Call the initial story generation function after character preferences entered
-        console.log("in submit preferences false");
         generateStory("", false);  // false indicating it's the first chapter
     });
 
@@ -269,16 +267,93 @@ $(document).ready(function () {
         // Initialize the display
         pageStartAdventure.hide();
         pageNextChapter.hide();
+        userSelection.hide();
         userPreferences.hide();
         dalleImage.hide();
         pageEndOfStory.show();
         showTheStory();
     }
 
+    // Function to extract choices from the story text and display buttons
+    function parseAndDisplayChoices(storyText) {
+        var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
+        if (choices) {
+            choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
+            displayChoiceButtons(choices); // Display choice buttons
+        }
+    }
+
+    // Function to create and display choice buttons
+    function displayChoiceButtons(choices) {
+        var $container = $('#choice-container'); // Selector for the container
+        $container.empty(); // Clear existing content
+        choices.forEach(choice => {
+            var $button = $('<button></button>'); // Create a button element
+            $button.text(choice);
+            $button.addClass('choice-button');
+
+            // Display console log with each choice in the array
+            console.log("Option " + (choices.indexOf(choice) + 1) + ": " + choice);
+
+            $button.on('click', function() { // Add event listener
+                handleChoice(choice);
+            });
+            $container.append($button); // Append button to container
+        });
+    }
+    
+    // Function to handle the user's choice from the buttons
+    function handleChoice(choice) {
+        console.log("\nUser choice: ", choice);
+        // Set the input field's value to the choice made from the buttons
+        nextChapterInput.val(choice);
+    
+        // Manually trigger the form submission
+        formNextChapter.submit();
+    }
+
+    // Function to extract choices from the story text and display buttons
+    function parseAndDisplayChoices(storyText) {
+        var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
+        if (choices) {
+            choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
+            displayChoiceButtons(choices); // Display choice buttons
+        }
+    }
+
+    // Function to create and display choice buttons (as provided earlier)
+    function displayChoiceButtons(choices) {
+        var $container = $('#choice-container'); // Selector for the container
+        $container.empty(); // Clear existing content
+        choices.forEach(choice => {
+            var $button = $('<button></button>'); // Create a button element
+            $button.text(choice);
+            $button.addClass('choice-button');
+
+            // Display console log with each choice in the array
+            console.log("Option " + (choices.indexOf(choice) + 1) + ": " + choice);
+
+            $button.on('click', function() { // Add event listener
+                handleChoice(choice);
+            });
+            $container.append($button); // Append button to container
+        });
+    }
+    
+    // Function to handle the user's choice from the buttons
+    function handleChoice(choice) {
+        console.log("\nUser choice: ", choice);
+        // Set the input field's value to the choice made from the buttons
+        nextChapterInput.val(choice);
+    
+        // Manually trigger the form submission
+        formNextChapter.submit();
+    }
+
     // STEP 3: Story generation
     // Function to generate story text
     function generateStory(userResponse, isNextChapter) {
-        console.log("Attempting to generate story text!");
+        console.log("\nAttempting to generate story text!");
         dalleImage.hide();
 
         // Concatenate prompts and responses from storySoFar array
@@ -294,12 +369,12 @@ $(document).ready(function () {
 
         // Define the prompt based on whether it's the initial story or a subsequent chapter
         var prompt = isNextChapter ?
-            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. Generate between 50 and 70 words before giving the user a choice in the following format: "Do you [run away] or [approach the figure]?` :
-            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. Make it between 50 to 70 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" ${fullStory}`;
+            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. IMPORTANT: Generate between 50 and 100 words before giving the user a choice in EXACTLY the following format: "Do you [run away] or [approach the figure]?" The user's options MUST be in brackets.` :
+            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. IMPORTANT: Make it about 100 words before giving the user a choice in exactly the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" ${fullStory}`;
 
         // Set up for the last prompt of the story    
         if (promptsEntered === lengthOfStory) {
-            prompt = `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}".  Make sure to use the present tense. Here is the story so far: ${fullStory}. Continue the story from here. This will be the final part of the story! Make sure to generate a grand finale ending! Do not go over 200 words before coming to a conclusion. Remember the genre of the story is ${storyGenre}. Always end the story with "THE END".`;
+            prompt = `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}".  Make sure to use the present tense. Here is the story so far: ${fullStory}. Continue the story from here. This will be the final part of the story! Make sure to generate a grand finale ending! IMPORTANT: Do not go over 200 words before coming to a conclusion. Remember the genre of the story is ${storyGenre}. Always end the story with "THE END".`;
             console.log("Attempting to generate the grand finale ending!");
         }
         // The gpt text call to Open AI
@@ -311,6 +386,7 @@ $(document).ready(function () {
             },
             body: JSON.stringify({
                 model: 'gpt-3.5-turbo-1106',
+                model: 'gpt-3.5-turbo-1106',
                 messages: [{ role: "system", content: prompt }],
                 max_tokens: 450
             })
@@ -321,57 +397,81 @@ $(document).ready(function () {
                 var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
                 typeWriter(storyText); // show the response text in the gptText element
 
+                // Parse the story text for choices and display buttons
+                parseAndDisplayChoices(storyText);
+
                 // Add the prompt and response to the storySoFar array
                 storySoFar.push({ prompt: prompt, response: storyText, userResponse: userResponse });
-                console.log(storySoFar);
+
+                // Console log the entire story so far array
+                // console.log("\nStory so far array:");
+                // console.log(storySoFar);
 
                 // If this is time to display an image per the number of prompts we display an image field,
                 // display the image. Otherwise, clear things up so that we see the screen without an image.
                 // Note: this is all dependant on the global variable NUM_PROMPTS_B4_IMG.
                 // We always display an image on the last prompt, the finale.
                 if ((!(promptsEntered % NUM_PROMPTS_B4_IMG)) || (promptsEntered === lengthOfStory)) {
-                    console.log("attempting to generate image");
+                    console.log("\nAttempting to generate image!");
                     generateImage(storyText); // generate the dall-e image function
                     // dalleImage.show();
                 } else {
-                    console.log("not generating an image this time");
-                    console.log("promptsEntered:", promptsEntered);
-                    dalleImage.hide();
+                    console.log("\nNot generating an image this time!");
                 }
 
                 // If this is the last prompt/chapter that we just displayed, clean up and go 
                 // to save and share.
-                console.log("promptsEntered:", promptsEntered, "lengthOfStory:", lengthOfStory);
+                console.log("\nOptions chosen: ", promptsEntered, "Max options chosen: ", lengthOfStory);
                 if (promptsEntered == lengthOfStory) {
-                    console.log("Attempting to end story generation & run save and share function!");
+                    console.log("\nAttempting to end story generation & run save and share function!");
                     saveAndShare();
                     return;
                 }
                 // Show the next page if it's the initial story
                 if (!isNextChapter) {
                     pageNextChapter.show();
+                    // Wait until the text is finished typing before showing the user input form
+                    setTimeout(function () {
+                        userSelection.show();
+                    }, storyText.length * lengthMultiplier); // Timeout value based on the length of the response
+
+                    console.log("\nStory character length: ", storyText.length);
+                    // Show timeout length in seconds instead of milliseconds
+                    console.log("Timeout length: ", (storyText.length * lengthMultiplier) / 1000, "seconds");
+
                     pageStartAdventure.hide();
-
-                    // Generate image every NUM_PROMPTS_B4_IMG chapters
-                    console.log("promptsEntered: ", promptsEntered)
-
                 }
 
-                // Show the user input form again
-                $('#page-next-chapter-input').show();
-            });
-
-        // Hide the previous page if it's not the initial story
-        if (isNextChapter) {
-            pageStartAdventure.hide();
-            pageNextChapter.show();
-        }
+                // Hide the previous page if it's not the initial story
+                if (isNextChapter) {
+                    pageStartAdventure.hide();
+                    pageNextChapter.show();
+                    // Wait until the text is finished typing before showing the user input form
+                    setTimeout(function () {
+                        userSelection.show();
+                    }, storyText.length * lengthMultiplier);
+                    console.log("\nStory character length: ", storyText.length);
+                    // Show timeout length in seconds instead of milliseconds
+                    console.log("Timeout length: ", (storyText.length * lengthMultiplier) / 1000, "seconds");
+                }
+            }
+            )
     }
+    
+
 
     // Function to generate image, using the text from the generated story
     function generateImage(storyText) {
         dalleImage.hide(); // hide the previous image
-        loadingSpinner.show() // show a CSS loading spinner, may want to add "loading image, please wait 10 seconds"
+        loadingSpinner.show(); // show a CSS loading spinner, may want to add "loading image, please wait 10 seconds"
+
+        // Modify the story text before sending it to the dall-e API
+        // I'm trying to remove the last sentence of the story so that the image is more relevant
+        var endIndex = storyText.indexOf("Do");
+        if (endIndex !== -1) {
+            storyTextForImg = storyText.substring(0, endIndex);
+            console.log("Story text for image: ", storyTextForImg);
+        }
 
         // the dall-e API call is different than the GPT but uses the same key
         fetch('https://api.openai.com/v1/images/generations', {
@@ -382,8 +482,7 @@ $(document).ready(function () {
             },
             body: JSON.stringify({
                 model: 'dall-e-3',
-                prompt: storyText, //testing
-                //               prompt: testCharacter,
+                prompt: storyTextForImg,
                 n: 1, // how many images to generate
                 size: '1024x1024' // the size of the image, i wonder if a smaller size takes less tokens?
             })
