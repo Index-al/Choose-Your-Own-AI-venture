@@ -29,6 +29,9 @@ var storyGenre = '';
 var storySetting = '';
 var storyLength = '';
 var storySoFar = [];// Initialize storySoFar array to store the prompts, responses, and user choices
+var storyKeysLS = JSON.parse(localStorage.getItem('storyKeys'));//story keys stored in local Storage
+//var storyKeysArr = [];// This array will contain the keys to the stories
+var storedStoryLS = JSON.parse(localStorage.getItem('storyKeys'));// This array will contain the story that is pulled from local storage
 var testCharacter = ''; //TESTING
 var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
 
@@ -237,6 +240,7 @@ $(document).ready(function () {
     $('#save-story').click(function (event) {
         event.preventDefault();
         console.log("in save story");
+        saveStory();
     });
 
     // FUNCTIONS
@@ -251,6 +255,33 @@ $(document).ready(function () {
         }
     }
 
+    function saveStory() {
+        var numKeys = 0;
+
+        // get new story key to point to localStorage
+        storyKeysLS = JSON.parse(localStorage.getItem('storyKeys'));//story keys stored in local Storage
+
+        if (storyKeysLS == null) {
+            numKeys = 0;
+            console.log("in storyKeys null");
+        } else {
+            numKeys = JSON.parse(localStorage.getItem('storyKeys'));
+        }
+
+        // pull story from storySoFar and store in new story key local storage
+        var newKey = "Key" + numKeys;
+        console.log("newkey" + newKey);
+        localStorage.setItem(newKey, JSON.stringify(storySoFar));
+        debugger;
+
+        // store the new key into the storyKeys array in local storage
+        //localStorage.setItem('numberOfKeys', numKeys);
+
+        // add button to list of saved stories
+
+        // show the story with save, share, start over buttons page
+    }
+
     function startOver() {
         // Initially hide content
         pageStartAdventure.hide();
@@ -258,6 +289,9 @@ $(document).ready(function () {
         userPreferences.hide();
         pageEndOfStory.hide();
         userPreferences.show();
+
+        // Refresh storySoFar
+        
     }
 
     // When the story is complete, this function sets up the last display and offers a choice
@@ -272,6 +306,82 @@ $(document).ready(function () {
         dalleImage.hide();
         pageEndOfStory.show();
         showTheStory();
+    }
+
+    // Function to extract choices from the story text and display buttons
+    function parseAndDisplayChoices(storyText) {
+        var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
+        if (choices) {
+            choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
+            displayChoiceButtons(choices); // Display choice buttons
+        }
+    }
+
+    // Function to create and display choice buttons
+    function displayChoiceButtons(choices) {
+        var $container = $('#choice-container'); // Selector for the container
+        $container.empty(); // Clear existing content
+        choices.forEach(choice => {
+            var $button = $('<button></button>'); // Create a button element
+            $button.text(choice);
+            $button.addClass('choice-button');
+
+            // Display console log with each choice in the array
+            console.log("Option " + (choices.indexOf(choice) + 1) + ": " + choice);
+
+            $button.on('click', function() { // Add event listener
+                handleChoice(choice);
+            });
+            $container.append($button); // Append button to container
+        });
+    }
+    
+    // Function to handle the user's choice from the buttons
+    function handleChoice(choice) {
+        console.log("\nUser choice: ", choice);
+        // Set the input field's value to the choice made from the buttons
+        nextChapterInput.val(choice);
+    
+        // Manually trigger the form submission
+        formNextChapter.submit();
+    }
+
+    // Function to extract choices from the story text and display buttons
+    function parseAndDisplayChoices(storyText) {
+        var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
+        if (choices) {
+            choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
+            displayChoiceButtons(choices); // Display choice buttons
+        }
+    }
+
+    // Function to create and display choice buttons (as provided earlier)
+    function displayChoiceButtons(choices) {
+        var $container = $('#choice-container'); // Selector for the container
+        $container.empty(); // Clear existing content
+        choices.forEach(choice => {
+            var $button = $('<button></button>'); // Create a button element
+            $button.text(choice);
+            $button.addClass('choice-button');
+
+            // Display console log with each choice in the array
+            console.log("Option " + (choices.indexOf(choice) + 1) + ": " + choice);
+
+            $button.on('click', function() { // Add event listener
+                handleChoice(choice);
+            });
+            $container.append($button); // Append button to container
+        });
+    }
+    
+    // Function to handle the user's choice from the buttons
+    function handleChoice(choice) {
+        console.log("\nUser choice: ", choice);
+        // Set the input field's value to the choice made from the buttons
+        nextChapterInput.val(choice);
+    
+        // Manually trigger the form submission
+        formNextChapter.submit();
     }
 
     // Function to extract choices from the story text and display buttons
