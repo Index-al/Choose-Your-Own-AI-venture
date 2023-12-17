@@ -118,10 +118,10 @@ $(document).ready(function () {
             });
     });
 
-    $('#show-form-button').click(function() {
+    $('#show-form-button').click(function () {
         // Toggle the display of the form
         $('#form-next-chapter').toggle();
-      });
+    });
 
     // Handle the start of the adventure
     formStartAdventure.submit(function (event) {
@@ -192,7 +192,7 @@ $(document).ready(function () {
         localStorage.setItem('genre', storyGenre);
         localStorage.setItem('setting', storySetting);
         localStorage.setItem('length', storyLength);
-//debugger;
+        //debugger;
         // TESTING!!!
         //        testCharacter = characterJob + '&' +storyGenre + '&' +storySetting;
         //        console.log(testCharacter);
@@ -335,34 +335,34 @@ $(document).ready(function () {
             // Display console log with each choice in the array
             console.log("Option " + (choices.indexOf(choice) + 1) + ": " + choice);
 
-            $button.on('click', function() { // Add event listener
+            $button.on('click', function () { // Add event listener
                 handleChoice(choice);
             });
             $container.append($button); // Append button to container
         });
     }
-    
+
     // Function to handle the user's choice from the buttons
     function handleChoice(choice) {
         console.log("\nUser choice: ", choice);
         // Set the input field's value to the choice made from the buttons
         nextChapterInput.val(choice);
-    
+
         // Manually trigger the form submission
         formNextChapter.submit();
     }
 
     // Function to extract choices from the story text and display buttons
-    function parseAndDisplayChoices(storyText) {
+    /*function parseAndDisplayChoices(storyText) {
         var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
         if (choices) {
             choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
             displayChoiceButtons(choices); // Display choice buttons
         }
-    }
+    }*/
 
     // Function to create and display choice buttons (as provided earlier)
-    function displayChoiceButtons(choices) {
+    /*function displayChoiceButtons(choices) {
         var $container = $('#choice-container'); // Selector for the container
         $container.empty(); // Clear existing content
         choices.forEach(choice => {
@@ -378,29 +378,29 @@ $(document).ready(function () {
             });
             $container.append($button); // Append button to container
         });
-    }
-    
+    }*/
+
     // Function to handle the user's choice from the buttons
-    function handleChoice(choice) {
+    /*function handleChoice(choice) {
         console.log("\nUser choice: ", choice);
         // Set the input field's value to the choice made from the buttons
         nextChapterInput.val(choice);
     
         // Manually trigger the form submission
         formNextChapter.submit();
-    }
+    }*/
 
     // Function to extract choices from the story text and display buttons
-    function parseAndDisplayChoices(storyText) {
+    /*function parseAndDisplayChoices(storyText) {
         var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
         if (choices) {
             choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
             displayChoiceButtons(choices); // Display choice buttons
         }
-    }
+    }*/
 
     // Function to create and display choice buttons
-    function displayChoiceButtons(choices) {
+    /*function displayChoiceButtons(choices) {
         var $container = $('#choice-container'); // Selector for the container
         $container.empty(); // Clear existing content
         choices.forEach(choice => {
@@ -416,29 +416,29 @@ $(document).ready(function () {
             });
             $container.append($button); // Append button to container
         });
-    }
-    
+    }*/
+
     // Function to handle the user's choice from the buttons
-    function handleChoice(choice) {
+    /*function handleChoice(choice) {
         console.log("\nUser choice: ", choice);
         // Set the input field's value to the choice made from the buttons
         nextChapterInput.val(choice);
     
         // Manually trigger the form submission
         formNextChapter.submit();
-    }
+    }*/
 
     // Function to extract choices from the story text and display buttons
-    function parseAndDisplayChoices(storyText) {
+    /*function parseAndDisplayChoices(storyText) {
         var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
         if (choices) {
             choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
             displayChoiceButtons(choices); // Display choice buttons
         }
-    }
+    }*/
 
     // Function to create and display choice buttons (as provided earlier)
-    function displayChoiceButtons(choices) {
+    /*function displayChoiceButtons(choices) {
         var $container = $('#choice-container'); // Selector for the container
         $container.empty(); // Clear existing content
         choices.forEach(choice => {
@@ -454,17 +454,17 @@ $(document).ready(function () {
             });
             $container.append($button); // Append button to container
         });
-    }
-    
+    }*/
+
     // Function to handle the user's choice from the buttons
-    function handleChoice(choice) {
+    /*function handleChoice(choice) {
         console.log("\nUser choice: ", choice);
         // Set the input field's value to the choice made from the buttons
         nextChapterInput.val(choice);
     
         // Manually trigger the form submission
         formNextChapter.submit();
-    }
+    }*/
 
     // STEP 3: Story generation
     // Function to generate story text
@@ -512,7 +512,7 @@ $(document).ready(function () {
                 dalleImage.hide();
                 var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
                 typeWriter(storyText); // show the response text in the gptText element
-//debugger;
+                //debugger;
                 // Parse the story text for choices and display buttons
                 parseAndDisplayChoices(storyText);
 
@@ -573,7 +573,7 @@ $(document).ready(function () {
             }
             )
     }
- 
+
     // Function to generate image, using the text from the generated story
     function generateImage(storyText) {
         dalleImage.hide(); // hide the previous image
@@ -638,6 +638,4 @@ $(document).ready(function () {
 // image fade-in effect
 function fadeInImage() {
     $('#imageFade').css('visibility', 'visible').animate({ opacity: 1 }, 1000);
-  }
-
-
+}
