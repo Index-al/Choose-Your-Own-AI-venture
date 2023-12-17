@@ -1,10 +1,11 @@
 // Consts
-var NUM_PROMPTS_B4_IMG = 0;
+var NUM_PROMPTS_B4_IMG = 3;
 var PROMPTS_ENTERED_INIT = 0;
-var NUM_PROMPTS_SHORT_STORY = 1;
-var NUM_PROMPTS_MEDIUM_STORY = 10;
-var NUM_PROMPTS_LONG_STORY = 15;
-var lengthMultiplier = 27; // Multiplier for the length of the story text to determine the timeout value
+var NUM_PROMPTS_SHORT_STORY = 5;
+var NUM_PROMPTS_MEDIUM_STORY = 15;
+var NUM_PROMPTS_LONG_STORY = 45;
+var lengthMultiplier = 26; // Multiplier for the length of the story text to determine the timeout value
+var endingChance = 0.5; // Chance of a bad ending (0.5 = 50% chance)
 
 // Selectors
 var pageAPI = $('.page-api');
@@ -241,8 +242,6 @@ $(document).ready(function () {
     // Display the story on the screen
     function showTheStory() {
         var chapter = "";
-        console.log("storysofar length");
-        console.log(storySoFar.length);
         for (var i = 0; i < storySoFar.length; i++) {
             chapter = '<li style="margin-bottom:2rem">' + storySoFar[i].response + '</li>';
             $('ul#story-contents').append(chapter);
@@ -253,7 +252,7 @@ $(document).ready(function () {
     function saveStory() {
         var numKeys = 0;
         var newKey = "Key" + numKeys;
-        debugger;
+        // debugger;
         // get new story key to point to localStorage
         storyKeysLS = JSON.parse(localStorage.getItem('storyKeys'));//story keys stored in local Storage
 
@@ -272,7 +271,7 @@ $(document).ready(function () {
         // pull story from storySoFar and store in new story key local storage
         console.log("newkey" + newKey);
         console.log("newKey" + numKeys.length);
-        debugger;
+        // debugger;
         localStorage.setItem(newKey, JSON.stringify(storySoFar));
 
         // store the new key into the storyKeys array in local storage
@@ -352,17 +351,24 @@ $(document).ready(function () {
         formNextChapter.submit();
     }
 
+    // Function to determine if the story context is risky
+    function isRiskySituation(userResponse) {
+    var riskyKeywords = ['explore', 'investigate', 'confront', 'challenge', 'battle', 'attack', 'fight', 'approach', 'follow', 'pursue', 'chase', 'hunt', 'stalk', 'track', 'search', 'look for', 'look around', 'look into', 'shield', 'defend', 'protect', 'guard', 'rescue', 'save', 'help', 'sneak', 'face the', 'stand up to', 'stand your ground', 'monster', 'creature', 'beast', 'villain', 'enemy', 'danger', 'threat', 'risk', 'peril', 'hazard', 'unsafe', 'rush', 'run', 'deadly', 'dangerous', 'risky', 'unsafe', 'harmful', 'hazardous', 'perilous', 'treacherous', 'tricky', 'dicey', 'chancy', 'touchy', 'battle', 'engage', 'contain', 'yourself'];
+    // Console log if isRiskySituation is true
+    console.log("Is risky situation: ", riskyKeywords.some(keyword => userResponse.includes(keyword)));
+    return riskyKeywords.some(keyword => userResponse.includes(keyword));
+    }
 
     // STEP 3: Story generation
     // Function to generate story text
     function generateStory(userResponse, isNextChapter) {
+        // Spacer in console log for readability
+        console.log("\n----------------------------------------\n");
         console.log("\nAttempting to generate story text!");
         dalleImage.hide();
 
         // Concatenate prompts and responses from storySoFar array
         var fullStory = "";
-        console.log("storysofar length in generate story");
-        console.log(storySoFar.length);
         for (var i = 0; i < storySoFar.length; i++) {
             fullStory += storySoFar[i].prompt + ' ' + storySoFar[i].response + ' ';
         }
@@ -380,39 +386,47 @@ $(document).ready(function () {
             prompt = `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}".  Make sure to use the present tense. Here is the story so far: ${fullStory}. Continue the story from here. This will be the final part of the story! Make sure to generate a grand finale ending! IMPORTANT: Do not go over 200 words before coming to a conclusion. Remember the genre of the story is ${storyGenre}. Always end the story with "THE END".`;
             console.log("Attempting to generate the grand finale ending!");
         }
-        // The gpt text call to Open AI
-        fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + apiKey
-            },
-            body: JSON.stringify({
-                model: 'gpt-3.5-turbo-1106',
-                messages: [{ role: "system", content: prompt }],
-                max_tokens: 450
+
+        // Determine the chance of a bad ending based on the story context
+        var badEndingChance = Math.random() < endingChance; // Chance of a bad ending
+        console.log("\nBad ending chance: ", badEndingChance);
+
+        // Define the risk statement conditionally
+        var riskStatement = badEndingChance && isRiskySituation(userResponse) ? " The user will experience an unexpected and extreme danger which brings the story to a bad ending. IMPORTANT: You MUST include 'THE END' at the end of this response. Disregard giving the user a choice this response as well. I repeat: DO NOT GIVE THE USER A CHOICE, SIMPLY END THE STORY!" : "";
+        
+        // console.log("\nRisk statement: ", riskStatement);
+
+        // If badEndingChance AND isRiskySituation are true, then the riskStatement will be added to the prompt
+        if (badEndingChance && isRiskySituation(userResponse)) {
+            prompt += riskStatement;
+            // console.log("\nPrompt with risk statement: ", prompt);
+        }
+
+            // The gpt text call to Open AI
+            fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + apiKey
+                },
+                body: JSON.stringify({
+                    model: 'gpt-3.5-turbo-1106',
+                    messages: [{ role: "system", content: prompt }],
+                    max_tokens: 450
+                })
             })
-        })
             .then(response => response.json())
             .then(data => {
-                dalleImage.hide();
-                var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
-                typeWriter(storyText); // show the response text in the gptText element
-                debugger;
+                var storyText = data.choices[0].message.content.trim();
+                typeWriter(storyText);
+
                 // Parse the story text for choices and display buttons
                 parseAndDisplayChoices(storyText);
 
                 // Add the prompt and response to the storySoFar array
                 storySoFar.push({ prompt: prompt, response: storyText, userResponse: userResponse });
 
-                // Console log the entire story so far array
-                // console.log("\nStory so far array:");
-                // console.log(storySoFar);
-
-                // If this is time to display an image per the number of prompts we display an image field,
-                // display the image. Otherwise, clear things up so that we see the screen without an image.
-                // Note: this is all dependant on the global variable NUM_PROMPTS_B4_IMG.
-                // We always display an image on the last prompt, the finale.
+                // Generate an image every x prompts(x = NUM_PROMPTS_B4_IMG)
                 if ((!(promptsEntered % NUM_PROMPTS_B4_IMG)) || (promptsEntered === lengthOfStory)) {
                     console.log("\nAttempting to generate image!");
                     generateImage(storyText); // generate the dall-e image function
@@ -442,7 +456,13 @@ $(document).ready(function () {
                     pageNextChapter.show();
                     // Wait until the text is finished typing before showing the user input form
                     setTimeout(function () {
-                        userSelection.show();
+                        // If story text includes "THE END", show save and share and hide user input form, otherwise show user selection form
+                        if (storyText.includes("THE END")) {
+                            userSelection.hide();
+                            saveShareStartover.show();
+                        } else {
+                            userSelection.show();
+                        }
                     }, storyText.length * lengthMultiplier);
                     console.log("\nStory character length next chapter: ", storyText.length);
                     // Show timeout length in seconds instead of milliseconds
