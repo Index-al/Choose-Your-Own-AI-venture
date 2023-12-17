@@ -288,16 +288,17 @@ $(document).ready(function () {
 
     function startOver() {
         // Initially hide content
-        pageStartAdventure.hide();
-        pageNextChapter.hide();
-        userPreferences.hide();
-        pageEndOfStory.hide();
-        userPreferences.show();
+        // pageStartAdventure.hide();
+        // pageNextChapter.hide();
+        // userPreferences.hide();
+        // pageEndOfStory.hide();
+        // userPreferences.show();
 
         // Refresh storySoFar
         for (var i = 0; i < storySoFar.length; i++) {
             storySoFar.pop();
         }
+        location.reload();
     }
 
     // When the story is complete, this function sets up the last display and offers a choice
@@ -352,119 +353,6 @@ $(document).ready(function () {
         formNextChapter.submit();
     }
 
-    // Function to extract choices from the story text and display buttons
-    /*function parseAndDisplayChoices(storyText) {
-        var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
-        if (choices) {
-            choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
-            displayChoiceButtons(choices); // Display choice buttons
-        }
-    }*/
-
-    // Function to create and display choice buttons (as provided earlier)
-    /*function displayChoiceButtons(choices) {
-        var $container = $('#choice-container'); // Selector for the container
-        $container.empty(); // Clear existing content
-        choices.forEach(choice => {
-            var $button = $('<button></button>'); // Create a button element
-            $button.text(choice);
-            $button.addClass('choice-button');
-
-            // Display console log with each choice in the array
-            console.log("Option " + (choices.indexOf(choice) + 1) + ": " + choice);
-
-            $button.on('click', function() { // Add event listener
-                handleChoice(choice);
-            });
-            $container.append($button); // Append button to container
-        });
-    }*/
-
-    // Function to handle the user's choice from the buttons
-    /*function handleChoice(choice) {
-        console.log("\nUser choice: ", choice);
-        // Set the input field's value to the choice made from the buttons
-        nextChapterInput.val(choice);
-    
-        // Manually trigger the form submission
-        formNextChapter.submit();
-    }*/
-
-    // Function to extract choices from the story text and display buttons
-    /*function parseAndDisplayChoices(storyText) {
-        var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
-        if (choices) {
-            choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
-            displayChoiceButtons(choices); // Display choice buttons
-        }
-    }*/
-
-    // Function to create and display choice buttons
-    /*function displayChoiceButtons(choices) {
-        var $container = $('#choice-container'); // Selector for the container
-        $container.empty(); // Clear existing content
-        choices.forEach(choice => {
-            var $button = $('<button></button>'); // Create a button element
-            $button.text(choice);
-            $button.addClass('choice-button');
-
-            // Display console log with each choice in the array
-            console.log("Option " + (choices.indexOf(choice) + 1) + ": " + choice);
-
-            $button.on('click', function() { // Add event listener
-                handleChoice(choice);
-            });
-            $container.append($button); // Append button to container
-        });
-    }*/
-
-    // Function to handle the user's choice from the buttons
-    /*function handleChoice(choice) {
-        console.log("\nUser choice: ", choice);
-        // Set the input field's value to the choice made from the buttons
-        nextChapterInput.val(choice);
-    
-        // Manually trigger the form submission
-        formNextChapter.submit();
-    }*/
-
-    // Function to extract choices from the story text and display buttons
-    /*function parseAndDisplayChoices(storyText) {
-        var choices = storyText.match(/\[.*?\]/g); // Array of choices in brackets
-        if (choices) {
-            choices = choices.map(choice => choice.slice(1, -1)); // Remove brackets
-            displayChoiceButtons(choices); // Display choice buttons
-        }
-    }*/
-
-    // Function to create and display choice buttons (as provided earlier)
-    /*function displayChoiceButtons(choices) {
-        var $container = $('#choice-container'); // Selector for the container
-        $container.empty(); // Clear existing content
-        choices.forEach(choice => {
-            var $button = $('<button></button>'); // Create a button element
-            $button.text(choice);
-            $button.addClass('choice-button');
-
-            // Display console log with each choice in the array
-            console.log("Option " + (choices.indexOf(choice) + 1) + ": " + choice);
-
-            $button.on('click', function() { // Add event listener
-                handleChoice(choice);
-            });
-            $container.append($button); // Append button to container
-        });
-    }*/
-
-    // Function to handle the user's choice from the buttons
-    /*function handleChoice(choice) {
-        console.log("\nUser choice: ", choice);
-        // Set the input field's value to the choice made from the buttons
-        nextChapterInput.val(choice);
-    
-        // Manually trigger the form submission
-        formNextChapter.submit();
-    }*/
 
     // STEP 3: Story generation
     // Function to generate story text
@@ -502,7 +390,6 @@ $(document).ready(function () {
             },
             body: JSON.stringify({
                 model: 'gpt-3.5-turbo-1106',
-                model: 'gpt-3.5-turbo-1106',
                 messages: [{ role: "system", content: prompt }],
                 max_tokens: 450
             })
@@ -539,7 +426,9 @@ $(document).ready(function () {
                 // to save and share.
                 console.log("\nOptions chosen: ", promptsEntered, "Max options chosen: ", lengthOfStory);
                 if (promptsEntered == lengthOfStory) {
+                    pageNextChapter.show();
                     console.log("\nAttempting to end story generation & run save and share function!");
+
                     saveAndShare();
                     return;
                 }
