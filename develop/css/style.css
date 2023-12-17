@@ -288,17 +288,24 @@ img {
 .user-selection {
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
+  width: 85%;
   }
   
-.choice-button {
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-  font-weight: 600;
-  font-size: 1.4rem;
-}
-  
+  .choice-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 1.4rem;
+    white-space: normal; /* Allow the text to wrap */
+    line-height: 1.2;
+  }
+
 .choice-button:hover {
   background-color: red;
   color: white;
@@ -323,13 +330,8 @@ img {
 
 /* action items to show at end of story */
 #save-share-startover {
-  grid-column: 2;
   justify-self: center;
   text-align: center;
-  grid-column: 0 / span 3;
-  /*margin: 30px 0;*/
-  /*testing*/ 
-  margin-left: 20rem;
 }
 
 #save-story {

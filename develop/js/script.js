@@ -21,6 +21,7 @@ var dalleImage = $('.dalle-image-generation');
 var loadingSpinner = $('.loading-spinner');
 var nextChapterInput = $('#page-next-chapter-input');
 var userSelection = $('.user-selection');
+var saveShareStartover = $('#save-share-startover');
 
 // Variables
 var characterName = '';
@@ -47,6 +48,7 @@ $(document).ready(function () {
     userPreferences.hide();
     pageEndOfStory.hide();
     userSelection.hide();
+    saveShareStartover.hide();
 
     // Check for API key in localStorage
     var apiKey = localStorage.getItem('apiKey');
@@ -300,17 +302,17 @@ $(document).ready(function () {
 
     // When the story is complete, this function sets up the last display and offers a choice
     // of saving the story, starting over or sharing the story
-    function saveAndShare() {
-        console.log("in Save and Share");
-        // Initialize the display
-        pageStartAdventure.hide();
-        pageNextChapter.hide();
-        userSelection.hide();
-        userPreferences.hide();
-        dalleImage.hide();
-        pageEndOfStory.show();
-        showTheStory();
-    }
+    // function saveAndShare() {
+    //     console.log("in Save and Share");
+    //     // Initialize the display
+    //     pageStartAdventure.hide();
+    //     pageNextChapter.hide();
+    //     userSelection.hide();
+    //     userPreferences.hide();
+    //     dalleImage.hide();
+    //     pageEndOfStory.show();
+    //     showTheStory();
+    // }
 
     // Function to extract choices from the story text and display buttons
     function parseAndDisplayChoices(storyText) {
@@ -349,6 +351,7 @@ $(document).ready(function () {
         // Manually trigger the form submission
         formNextChapter.submit();
     }
+
 
     // STEP 3: Story generation
     // Function to generate story text
@@ -418,16 +421,6 @@ $(document).ready(function () {
                     console.log("\nNot generating an image this time!");
                 }
 
-                // If this is the last prompt/chapter that we just displayed, clean up and go 
-                // to save and share.
-                console.log("\nOptions chosen: ", promptsEntered, "Max options chosen: ", lengthOfStory);
-                if (promptsEntered == lengthOfStory) {
-                    pageNextChapter.show();
-                    console.log("\nAttempting to end story generation & run save and share function!");
-
-                    saveAndShare();
-                    return;
-                }
                 // Show the next page if it's the initial story
                 if (!isNextChapter) {
                     pageNextChapter.show();
@@ -454,6 +447,18 @@ $(document).ready(function () {
                     console.log("\nStory character length next chapter: ", storyText.length);
                     // Show timeout length in seconds instead of milliseconds
                     console.log("Timeout length: ", (storyText.length * lengthMultiplier) / 1000, "seconds");
+                }
+
+                // If this is the last prompt/chapter show save and share
+                console.log("\nOptions chosen: ", promptsEntered, "Max options chosen: ", lengthOfStory);
+                if (promptsEntered == lengthOfStory) {
+                    setTimeout(function () {
+                        userSelection.hide();
+                        saveShareStartover.show();
+                    }, storyText.length * lengthMultiplier);
+                    
+                    console.log("\nAttempting to end story generation & run save and share function!");
+                    return;
                 }
             }
             )
