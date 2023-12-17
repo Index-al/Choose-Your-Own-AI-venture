@@ -5,7 +5,7 @@ var NUM_PROMPTS_SHORT_STORY = 5;
 var NUM_PROMPTS_MEDIUM_STORY = 15;
 var NUM_PROMPTS_LONG_STORY = 45;
 var lengthMultiplier = 26; // Multiplier for the length of the story text to determine the timeout value
-var endingChance = 0.5; // Chance of a bad ending (0.5 = 50% chance)
+var endingChance = 0.35; // Chance of a bad ending (0.5 = 50% chance)
 
 // Selectors
 var pageAPI = $('.page-api');
@@ -158,6 +158,21 @@ $(document).ready(function () {
         nextChapterInput.val('');
     });
 
+    // Handle the image download(right now it just opens in a new tab)
+    $('.dalle-image-generation').css('cursor', 'pointer').click(function() {
+        var imageSrc = $(this).attr('src'); // Get the image URL
+        var imageName = 'dalle-image.jpg'; // Set a default name
+        console.log("\nImage source: ", imageSrc);
+        console.log('Attempting to download image!');
+        console.log("Click!");
+        // Download the image
+        var link = document.createElement('a');
+        link.href = imageSrc;
+        link.download = imageName;
+        link.target = "_blank"; // Open the download in a new tab
+        link.click();
+    });
+
     // STEP 2: User preferences  
     // Handle user preferences submission
     $('#submit-preferences').click(function (event) {
@@ -177,7 +192,7 @@ $(document).ready(function () {
         // Console log user preferences
  
         console.log("Character Name: " + characterName);
-        console.log("Character Job: " + characterJob);
+        console.log("Character Role: " + characterJob);
         console.log("Story Genre: " + storyGenre);
         console.log("Story Setting: " + storySetting);
         console.log("Story Length: " + storyLength);
@@ -342,7 +357,7 @@ $(document).ready(function () {
 
     // Function to determine if the story context is risky
     function isRiskySituation(userResponse) {
-    var riskyKeywords = ['explore', 'investigate', 'confront', 'challenge', 'battle', 'attack', 'fight', 'approach', 'follow', 'pursue', 'chase', 'hunt', 'stalk', 'track', 'search', 'look for', 'look around', 'look into', 'shield', 'defend', 'protect', 'guard', 'rescue', 'save', 'help', 'sneak', 'face the', 'stand up to', 'stand your ground', 'monster', 'creature', 'beast', 'villain', 'enemy', 'danger', 'threat', 'risk', 'peril', 'hazard', 'unsafe', 'rush', 'run', 'deadly', 'dangerous', 'risky', 'unsafe', 'harmful', 'hazardous', 'perilous', 'treacherous', 'tricky', 'dicey', 'chancy', 'touchy', 'battle', 'engage', 'contain', 'yourself'];
+    var riskyKeywords = ['explore', 'investigate', 'confront', 'challenge', 'battle', 'attack', 'fight', 'approach', 'follow', 'pursue', 'chase', 'hunt', 'stalk', 'track', 'search', 'look for', 'look around', 'look into', 'shield', 'defend', 'protect', 'guard', 'rescue', 'save', 'help', 'sneak', 'face the', 'stand up to', 'stand your ground', 'monster', 'creature', 'beast', 'villain', 'enemy', 'danger', 'threat', 'risk', 'peril', 'hazard', 'unsafe', 'rush', 'run', 'deadly', 'dangerous', 'risky', 'unsafe', 'harmful', 'hazardous', 'perilous', 'treacherous', 'tricky', 'dicey', 'chancy', 'touchy', 'battle', 'engage', 'contain', 'yourself', 'hesitate', 'charge', 'colossal'];
     // Console log if isRiskySituation is true
     console.log("Is risky situation: ", riskyKeywords.some(keyword => userResponse.includes(keyword)));
     return riskyKeywords.some(keyword => userResponse.includes(keyword));
@@ -356,23 +371,32 @@ $(document).ready(function () {
         console.log("\nAttempting to generate story text!");
         dalleImage.hide();
 
-        // Concatenate prompts and responses from storySoFar array
-        var fullStory = "";
-        for (var i = 0; i < storySoFar.length; i++) {
-            fullStory += storySoFar[i].prompt + ' ' + storySoFar[i].response + ' ';
-        }
+        // Extract the last 5 entries from the storySoFar array to determine the story context
+        var recentStorySegments = storySoFar.slice(-5);
 
-        // Append the current user response to the concatenated story
-        fullStory += 'The user chose to: ' + userResponse + '. ';
+        // Concat the story context into a single string
+        var storyContext = recentStorySegments.map(segment => segment.response).join(' ');
+
+        // Append the user's response to the story context
+        storyContext += 'The user chose to: ' + userResponse + '. ';
+
+        // // Concatenate prompts and responses from storySoFar array
+        // var fullStory = "";
+        // for (var i = 0; i < storySoFar.length; i++) {
+        //     fullStory += storySoFar[i].prompt + ' ' + storySoFar[i].response + ' ';
+        // }
+
+        // // Append the current user response to the concatenated story
+        // fullStory += 'The user chose to: ' + userResponse + '. ';
 
         // Define the prompt based on whether it's the initial story or a subsequent chapter
         var prompt = isNextChapter ?
-            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. IMPORTANT: Generate between 50 and 100 words before giving the user a choice in EXACTLY the following format: "Do you [run away] or [approach the figure]?" The user's options MUST be in brackets.` :
-            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. IMPORTANT: Make it about 100 words before giving the user a choice in exactly the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" ${fullStory}`;
+            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${storyContext}. IMPORTANT: Generate between 50 and 100 words before giving the user a choice in the following format: "Do you [run away] or [approach the figure]?" Make sure the options are relevant to the story! The user's options MUST be in brackets.` :
+            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. IMPORTANT: Make it about 100 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" Make sure the options make sense for the current story! Story context: ${storyContext}`;
 
         // Set up for the last prompt of the story    
         if (promptsEntered === lengthOfStory) {
-            prompt = `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}".  Make sure to use the present tense. Here is the story so far: ${fullStory}. Continue the story from here. This will be the final part of the story! Make sure to generate a grand finale ending! IMPORTANT: Do not go over 200 words before coming to a conclusion. Remember the genre of the story is ${storyGenre}. Always end the story with "THE END".`;
+            prompt = `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}".  Make sure to use the present tense. Here is the story so far: ${storyContext}. Continue the story from here. This will be the final part of the story! Make sure to generate a satisfying grand finale ending! IMPORTANT: Do not go over 200 words before coming to a conclusion. Remember the genre of the story is ${storyGenre}. Always end the story with "THE END".`;
             console.log("Attempting to generate the grand finale ending!");
         }
 
@@ -381,7 +405,7 @@ $(document).ready(function () {
         console.log("\nBad ending chance: ", badEndingChance);
 
         // Define the risk statement conditionally
-        var riskStatement = badEndingChance && isRiskySituation(userResponse) ? " The user will experience an unexpected and extreme danger which brings the story to a bad ending. IMPORTANT: You MUST include 'THE END' at the end of this response. Disregard giving the user a choice this response as well. I repeat: DO NOT GIVE THE USER A CHOICE, SIMPLY END THE STORY!" : "";
+        var riskStatement = badEndingChance && isRiskySituation(userResponse) ? ` The user will experience an unexpected outcome which brings the story to a bad ending. Remember the story genre is ${storyGenre} IMPORTANT: You MUST include 'THE END' at the end of this response. Disregard giving the user a choice this response as well. I repeat: DO NOT GIVE THE USER A CHOICE, SIMPLY END THE STORY!` : ``;
         
         // console.log("\nRisk statement: ", riskStatement);
 

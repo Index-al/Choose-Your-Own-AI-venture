@@ -364,6 +364,24 @@ img {
   color: white;
 }
 
+/* Custom Scrollbar for Chrome, Edge, and Safari */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #003366; /* Dark blue */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #002244; /* A darker shade of blue */
+}
+
+
 /* Media query for narrower screen */
 @media screen and (max-width: 1400px) {
 
@@ -397,6 +415,7 @@ img {
   .user-preferences {
     grid-template-columns: 5% 1fr 5%;
     row-gap: 5px;
+    margin-top: 10%;
   }
 
   label[for="inputSetting"] {
