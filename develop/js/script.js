@@ -289,6 +289,9 @@ $(document).ready(function () {
         userPreferences.hide();
         pageEndOfStory.hide();
         userPreferences.show();
+
+        // Refresh storySoFar
+        
     }
 
     // When the story is complete, this function sets up the last display and offers a choice
