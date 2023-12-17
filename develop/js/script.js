@@ -158,6 +158,21 @@ $(document).ready(function () {
         nextChapterInput.val('');
     });
 
+    // Handle the image download(right now it just opens in a new tab)
+    $('.dalle-image-generation').css('cursor', 'pointer').click(function() {
+        var imageSrc = $(this).attr('src'); // Get the image URL
+        var imageName = 'dalle-image.jpg'; // Set a default name
+        console.log("\nImage source: ", imageSrc);
+        console.log('Attempting to download image!');
+        console.log("Click!");
+        // Download the image
+        var link = document.createElement('a');
+        link.href = imageSrc;
+        link.download = imageName;
+        link.target = "_blank"; // Open the download in a new tab
+        link.click();
+    });
+
     // STEP 2: User preferences  
     // Handle user preferences submission
     $('#submit-preferences').click(function (event) {
