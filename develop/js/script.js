@@ -175,25 +175,7 @@ $(document).ready(function () {
         storyLength = $('#inputLength').val();
 
         // Console log user preferences
-        if (characterName === "") {
-            characterName = "Rand";
-        }
-        
-        if (characterJob === "choose") {
-            characterJob = "Hero";
-        }
  
-        if (storyGenre === "choose") {
-            storyGenre = "Adventure"
-        }
- 
-        if (storySetting === "choose") {
-            storySetting = "castle";
-        }
- 
-        if (storyLength === "choose") {
-            storyLength = "short";
-        }
         console.log("Character Name: " + characterName);
         console.log("Character Job: " + characterJob);
         console.log("Story Genre: " + storyGenre);
