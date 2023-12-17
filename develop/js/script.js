@@ -426,7 +426,9 @@ $(document).ready(function () {
                 // to save and share.
                 console.log("\nOptions chosen: ", promptsEntered, "Max options chosen: ", lengthOfStory);
                 if (promptsEntered == lengthOfStory) {
+                    pageNextChapter.show();
                     console.log("\nAttempting to end story generation & run save and share function!");
+
                     saveAndShare();
                     return;
                 }

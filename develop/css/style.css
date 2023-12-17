@@ -177,7 +177,8 @@ label[for="inputLength"] {
 
 /* the main results grid on wide screen */
 .page-start-adventure,
-.page-next-chapter {
+.page-next-chapter,
+.page-end-of-story {
   margin-top: 1rem;
   max-width: 90%; /* Max width to fit inside the background book image */
   margin: auto; 
