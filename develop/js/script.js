@@ -192,7 +192,7 @@ $(document).ready(function () {
         localStorage.setItem('genre', storyGenre);
         localStorage.setItem('setting', storySetting);
         localStorage.setItem('length', storyLength);
-
+debugger;
         // TESTING!!!
         //        testCharacter = characterJob + '&' +storyGenre + '&' +storySetting;
         //        console.log(testCharacter);
@@ -255,6 +255,7 @@ $(document).ready(function () {
         }
     }
 
+    // save the current story in local storage
     function saveStory() {
         var numKeys = 0;
 
@@ -275,7 +276,10 @@ $(document).ready(function () {
         debugger;
 
         // store the new key into the storyKeys array in local storage
-        //localStorage.setItem('numberOfKeys', numKeys);
+        storyKeysLS[numKeys] = newKey;
+        console.log(storyKeys);
+        debugger;
+        localStorage.setItem('storyKeys', numKeys);
 
         // add button to list of saved stories
 
@@ -291,7 +295,9 @@ $(document).ready(function () {
         userPreferences.show();
 
         // Refresh storySoFar
-        
+        for (var i = 0; i < storySoFar.length; i++) {
+            storySoFar.pop();
+        }
     }
 
     // When the story is complete, this function sets up the last display and offers a choice
@@ -506,7 +512,7 @@ $(document).ready(function () {
                 dalleImage.hide();
                 var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
                 typeWriter(storyText); // show the response text in the gptText element
-
+debugger;
                 // Parse the story text for choices and display buttons
                 parseAndDisplayChoices(storyText);
 
@@ -545,7 +551,7 @@ $(document).ready(function () {
                         userSelection.show();
                     }, storyText.length * lengthMultiplier); // Timeout value based on the length of the response
 
-                    console.log("\nStory character length: ", storyText.length);
+                    console.log("\nStory character length first chapter: ", storyText.length);
                     // Show timeout length in seconds instead of milliseconds
                     console.log("Timeout length: ", (storyText.length * lengthMultiplier) / 1000, "seconds");
 
@@ -560,7 +566,7 @@ $(document).ready(function () {
                     setTimeout(function () {
                         userSelection.show();
                     }, storyText.length * lengthMultiplier);
-                    console.log("\nStory character length: ", storyText.length);
+                    console.log("\nStory character length next chapter: ", storyText.length);
                     // Show timeout length in seconds instead of milliseconds
                     console.log("Timeout length: ", (storyText.length * lengthMultiplier) / 1000, "seconds");
                 }
@@ -578,6 +584,7 @@ $(document).ready(function () {
         // Modify the story text before sending it to the dall-e API
         // I'm trying to remove the last sentence of the story so that the image is more relevant
         var endIndex = storyText.indexOf("Do");
+        var storyTextForImg = "";
         if (endIndex !== -1) {
             storyTextForImg = storyText.substring(0, endIndex);
             console.log("Story text for image: ", storyTextForImg);
