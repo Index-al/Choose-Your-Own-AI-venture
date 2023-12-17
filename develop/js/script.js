@@ -31,7 +31,7 @@ var storySetting = '';
 var storyLength = '';
 var storySoFar = [];// Initialize storySoFar array to store the prompts, responses, and user choices
 var storyKeysLS = JSON.parse(localStorage.getItem('storyKeys'));//story keys stored in local Storage
-//var storyKeysArr = [];// This array will contain the keys to the stories
+var storyKeysArr = [];// This array will contain the keys to the stories
 var storedStoryLS = JSON.parse(localStorage.getItem('storyKeys'));// This array will contain the story that is pulled from local storage
 var testCharacter = ''; //TESTING
 var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
@@ -69,14 +69,6 @@ $(document).ready(function () {
     storyGenre = localStorage.getItem('genre');
     storySetting = localStorage.getItem('setting');
     storyLength = localStorage.getItem('length');
-
-    // Console log user preferences
-    // console.log("\nUser preferences loaded from localStorage!");
-    // console.log("Character Name: " + characterName);
-    // console.log("Character Job: " + characterJob);
-    // console.log("Story Genre: " + storyGenre);
-    // console.log("Story Setting: " + storySetting);
-    // console.log("Story Length: " + storyLength);
 
     // BUTTON/CLICK PROCESSING
     // STEP 1: API key submission
@@ -260,32 +252,37 @@ $(document).ready(function () {
     // save the current story in local storage
     function saveStory() {
         var numKeys = 0;
-
+        var newKey = "Key" + numKeys;
+        debugger;
         // get new story key to point to localStorage
         storyKeysLS = JSON.parse(localStorage.getItem('storyKeys'));//story keys stored in local Storage
 
+        // if this is the first time looking for a key to a story, the list will be null and it will need
+        // to be initialized
         if (storyKeysLS == null) {
-            numKeys = 0;
             console.log("in storyKeys null");
+            storyKeysArr[0] = "";
+            localStorage.setItem("storyKeys", JSON.stringify(storyKeysArr));
+            //storyKeysArr = JSON.parse(localStorage.getItem('storyKeys'));
         } else {
             numKeys = JSON.parse(localStorage.getItem('storyKeys'));
+            newKey = "Key" + numKeys.length;
         }
 
         // pull story from storySoFar and store in new story key local storage
-        var newKey = "Key" + numKeys;
         console.log("newkey" + newKey);
+        console.log("newKey" + numKeys.length);
+        debugger;
         localStorage.setItem(newKey, JSON.stringify(storySoFar));
-        //debugger;
 
         // store the new key into the storyKeys array in local storage
-        storyKeysLS[numKeys] = newKey;
-        console.log(storyKeys);
-        //debugger;
-        localStorage.setItem('storyKeys', numKeys);
+        console.log(storyKeysLS);
+        storyKeysArr[numKeys] = newKey;
+
+        localStorage.setItem('storyKeys', JSON.stringify(storyKeysArr));
 
         // add button to list of saved stories
 
-        // show the story with save, share, start over buttons page
     }
 
     function startOver() {
@@ -401,7 +398,7 @@ $(document).ready(function () {
                 dalleImage.hide();
                 var storyText = data.choices[0].message.content.trim(); // this is where the response is stored in data
                 typeWriter(storyText); // show the response text in the gptText element
-                //debugger;
+                debugger;
                 // Parse the story text for choices and display buttons
                 parseAndDisplayChoices(storyText);
 
