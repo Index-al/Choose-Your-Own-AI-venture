@@ -247,6 +247,13 @@ img {
   visibility: hidden;
 }
 
+
+#form-next-chapter {
+  width: 100%;
+  text-align: center;
+  justify-self: center;
+}
+
 /* Story continuation elements */
 .gpt-text-generation,
 #form-first-chapter {
@@ -267,11 +274,6 @@ img {
   font-weight: 600;
 }
 
-#form-next-chapter {
-  width: 70%;
-  text-align: center;
-  justify-self: center;
-}
 
 #page-next-chapter-input {
   width: 280px;
@@ -279,6 +281,43 @@ img {
 
 .hidden {
   display: none;
+}
+
+/* story continuation choices */
+.user-selection {
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  }
+  
+.choice-button {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+  
+.choice-button:hover {
+  background-color: red;
+  color: white;
+}
+  
+/* Show/hide form button */
+/* Should be only text, minimal, partial transparency */
+.show-form {
+  background-color: transparent;
+  border: none;
+  color: rgb(78, 61, 200);
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  text-align: center;
+  opacity: 0.5;
+  font-size: smaller;
 }
 
 /* action items to show at end of story */
@@ -389,18 +428,3 @@ img {
 
 }
 
-/* Show/hide form button */
-/* Should be only text, minimal, partial transparency */
-.show-form {
-  background-color: transparent;
-  border: none;
-  color: rgb(78, 61, 200);
-  font-size: 1.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-left: 15%;
-  margin-right: 15%;
-  text-align: center;
-  opacity: 0.5;
-  font-size: smaller;
-}
