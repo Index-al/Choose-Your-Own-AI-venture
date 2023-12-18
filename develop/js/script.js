@@ -1,4 +1,4 @@
-// Consts
+// Constants
 var NUM_PROMPTS_B4_IMG = 3;
 var PROMPTS_ENTERED_INIT = 0;
 var NUM_PROMPTS_SHORT_STORY = 5;
@@ -507,7 +507,7 @@ $(document).ready(function() {
         loadingSpinner.show(); // show a CSS loading spinner, may want to add "loading image, please wait 10 seconds"
 
         // Modify the story text before sending it to the dall-e API
-        // I'm trying to remove the last sentence of the story so that the image is more relevant
+        // Trying to remove the last sentence of the story so that the image is more relevant
         var endIndex = storyText.indexOf("Do");
         var storyTextForImg = "";
         if (endIndex !== -1) {
@@ -526,7 +526,7 @@ $(document).ready(function() {
                     model: 'dall-e-3',
                     prompt: storyTextForImg,
                     n: 1, // how many images to generate
-                    size: '1024x1024' // the size of the image, i wonder if a smaller size takes less tokens?
+                    size: '1024x1024' // the size of the image
                 })
             })
             .then(response => response.json())
