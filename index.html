@@ -2,17 +2,18 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="./develop/css/skeleton.css">
     <link rel="stylesheet" href="./develop/css/style.css" />
+    <link rel="icon" type="image/x-icon" href="./develop/images/AI-venture.ico">
     <title>Choose Your Own AI-venture</title>
 </head>
 
 <body>
   <h1 class="text-center">Choose Your Own AI-venture</h1>
+  <button class="reset-api">Reset API Key</button>
   <main>
     <!-- API key validation section -->
     <!-- Ask for OpenAI API key since we can't expose one in code -->
@@ -26,12 +27,11 @@
     <section class="user-preferences">
       
       <!-- TODO: Randomly generate user preferences -->
-      
+
       <!-- "Character Role" Options -->
       <label for="inputJob">Select a role for your character:</label>
-      <select id="inputJob">
-        <option value="choose">Choose your role</option>
-        <option value="random">Random</option>
+      <select id="inputJob" class="dropdown">
+        <option value="choose">Choose for me</option>
         <option value=""></option>
         <option value="student">Student</option>
         <option value="archer">Archer</option>
@@ -76,9 +76,8 @@
 
       <!-- "Setting" Options(spooky forest, abandoned laboratory, outer space, etc.) -->
       <label for="inputSetting">Story Setting:</label>
-      <select id="inputSetting">
-        <option value="choose">Choose your setting</option>
-        <option value="random">Random</option>
+      <select id="inputSetting" class="dropdown">
+        <option value="choose">Choose for me</option>
         <option value=""></option>
         <option value="school">School</option>
         <option value="spooky-forest">Spooky Forest</option>
@@ -116,9 +115,8 @@
       
       <!-- "Genre" Options -->
       <label for="inputGenre">Story Genre:</label>
-      <select id="inputGenre">
-        <option value="choose">Choose your genre</option>
-        <option value="random">Random</option>
+      <select id="inputGenre" class="dropdown">
+        <option value="choose">Choose for me</option>
         <option value=""></option>
         <option value="fantasy">Fantasy</option>
         <option value="sci-fi">Sci-Fi</option>
@@ -155,9 +153,8 @@
       
       <!-- "Story Length" Options(Short, Medium, Long) -->
       <label for="inputLength">Story Length:</label>
-      <select id="inputLength">
-        <option value="choose">Choose your story length</option>
-        <option value="random">Random</option>
+      <select id="inputLength" class="dropdown">
+        <option value="choose">Choose for me</option>
         <option value=""></option>
         <option value="short">Short</option>
         <option value="medium">Medium</option>
