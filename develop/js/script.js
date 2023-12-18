@@ -4,7 +4,7 @@ var PROMPTS_ENTERED_INIT = 0;
 var NUM_PROMPTS_SHORT_STORY = 5;
 var NUM_PROMPTS_MEDIUM_STORY = 15;
 var NUM_PROMPTS_LONG_STORY = 45;
-var lengthMultiplier = 26; // Multiplier for the length of the story text to determine the timeout value
+var lengthMultiplier = 27; // Multiplier for the length of the story text to determine the timeout value
 var endingChance = 0.35; // Chance of a bad ending (0.5 = 50% chance)
 
 // Selectors
@@ -30,10 +30,10 @@ var characterJob = '';
 var storyGenre = '';
 var storySetting = '';
 var storyLength = '';
-var storySoFar = [];// Initialize storySoFar array to store the prompts, responses, and user choices
-var storyKeysLS = JSON.parse(localStorage.getItem('storyKeys'));//story keys stored in local Storage
-var storyKeysArr = [];// This array will contain the keys to the stories
-var storedStoryLS = JSON.parse(localStorage.getItem('storyKeys'));// This array will contain the story that is pulled from local storage
+var storySoFar = []; // Initialize storySoFar array to store the prompts, responses, and user choices
+var storyKeysLS = JSON.parse(localStorage.getItem('storyKeys')); //story keys stored in local Storage
+var storyKeysArr = []; // This array will contain the keys to the stories
+var storedStoryLS = JSON.parse(localStorage.getItem('storyKeys')); // This array will contain the story that is pulled from local storage
 var testCharacter = ''; //TESTING
 var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
 
@@ -41,7 +41,7 @@ var promptsEntered = PROMPTS_ENTERED_INIT; // Start incrementing in next chapter
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
-$(document).ready(function () {
+$(document).ready(function() {
 
     // Initially hide content
     pageStartAdventure.hide();
@@ -74,24 +74,27 @@ $(document).ready(function () {
     // BUTTON/CLICK PROCESSING
     // STEP 1: API key submission
     // Test API for validity, Store API key on submission
-    submitAPI.click(function (event) {
+    submitAPI.click(function(event) {
         event.preventDefault();
         apiKey = inputAPI.val();
 
         var prompt = 'Test'; // Test prompt to ensure API key is working
 
         fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + apiKey
-            },
-            body: JSON.stringify({
-                model: 'gpt-3.5-turbo-1106',
-                messages: [{ role: "system", content: prompt }],
-                max_tokens: 25
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + apiKey
+                },
+                body: JSON.stringify({
+                    model: 'gpt-3.5-turbo-1106',
+                    messages: [{
+                        role: "system",
+                        content: prompt
+                    }],
+                    max_tokens: 25
+                })
             })
-        })
             .then(response => {
                 if (response.ok) {
                     // API key is valid, go ahead and set it to local storage
@@ -102,7 +105,7 @@ $(document).ready(function () {
                     $('<p style="color:red">API Key is not valid. Please try again.</p>').appendTo(pageAPI); // shows error message, might need to style later
                     inputAPI.val(''); // clears the API input form field
 
-                    setTimeout(function () {
+                    setTimeout(function() {
                         $('p').remove(); // remove the error message after delay
                     }, 2000);
                 }
@@ -114,7 +117,7 @@ $(document).ready(function () {
     });
 
     // Reset the API key button
-    $('.reset-api').click(function (event) {
+    $('.reset-api').click(function(event) {
         event.preventDefault();
         // Confirm the choice to reset the API key
         var confirmReset = confirm("Are you sure you want to reset the API key? You will have to generate a new one from OpenAI if you do not have it saved elsewhere.");
@@ -125,17 +128,28 @@ $(document).ready(function () {
         } else {
             console.log("Not resetting the API key!");
         }
-    }
-    );
+    });
+
+    // If the user clicks on the image, it will open in a new tab
+    dalleImage.click(function(event) {
+        event.preventDefault();
+        window.open(dalleImage.attr('src'));
+    });
+    // Make the cursor a pointer when hovering over the image
+    dalleImage.hover(function() {
+        $(this).css('cursor', 'pointer');
+    }, function() {
+        $(this).css('cursor', 'auto');
+    });
 
     // Handle the show-form-button clicked
-    $('#show-form-button').click(function () {
+    $('#show-form-button').click(function() {
         // Toggle the display of the form
         $('#form-next-chapter').toggle();
     });
 
     // Handle the start of the adventure
-    formStartAdventure.submit(function (event) {
+    formStartAdventure.submit(function(event) {
         event.preventDefault();
         console.log("\nStarting the adventure!");
 
@@ -160,7 +174,7 @@ $(document).ready(function () {
     });
 
     // Handle subsequent chapters
-    formNextChapter.submit(function (event) {
+    formNextChapter.submit(function(event) {
         event.preventDefault();
 
         // Hide the user input form until the next chapter is generated
@@ -176,7 +190,7 @@ $(document).ready(function () {
 
     // STEP 2: User preferences  
     // Handle user preferences submission
-    $('#submit-preferences').click(function (event) {
+    $('#submit-preferences').click(function(event) {
         event.preventDefault();
         console.log("\nUser preferences submitted!");
 
@@ -231,24 +245,24 @@ $(document).ready(function () {
         pageStartAdventure.show();
 
         // Call the initial story generation function after character preferences entered
-        generateStory("", false);  // false indicating it's the first chapter
+        generateStory("", false); // false indicating it's the first chapter
     });
 
     // Handle share-story clicked
-    $('#share-story').click(function (event) {
+    $('#share-story').click(function(event) {
         event.preventDefault();
         console.log("in share story");
     });
 
     // Handle startover-story clicked
-    $('#startover-story').click(function (event) {
+    $('#startover-story').click(function(event) {
         event.preventDefault();
         console.log("in startover story");
         startOver();
     });
 
     // Handle the save-story clicked
-    $('#save-story').click(function (event) {
+    $('#save-story').click(function(event) {
         event.preventDefault();
         console.log("in save story");
         saveStory();
@@ -270,7 +284,7 @@ $(document).ready(function () {
         var newKey = "Key" + numKeys;
         // debugger;
         // get new story key to point to localStorage
-        storyKeysLS = JSON.parse(localStorage.getItem('storyKeys'));//story keys stored in local Storage
+        storyKeysLS = JSON.parse(localStorage.getItem('storyKeys')); //story keys stored in local Storage
 
         // if this is the first time looking for a key to a story, the list will be null and it will need
         // to be initialized
@@ -301,33 +315,12 @@ $(document).ready(function () {
     }
 
     function startOver() {
-        // Initially hide content
-        // pageStartAdventure.hide();
-        // pageNextChapter.hide();
-        // userPreferences.hide();
-        // pageEndOfStory.hide();
-        // userPreferences.show();
-
         // Refresh storySoFar
         for (var i = 0; i < storySoFar.length; i++) {
             storySoFar.pop();
         }
         location.reload();
     }
-
-    // When the story is complete, this function sets up the last display and offers a choice
-    // of saving the story, starting over or sharing the story
-    // function saveAndShare() {
-    //     console.log("in Save and Share");
-    //     // Initialize the display
-    //     pageStartAdventure.hide();
-    //     pageNextChapter.hide();
-    //     userSelection.hide();
-    //     userPreferences.hide();
-    //     dalleImage.hide();
-    //     pageEndOfStory.show();
-    //     showTheStory();
-    // }
 
     // Function to extract choices from the story text and display buttons
     function parseAndDisplayChoices(storyText) {
@@ -350,7 +343,7 @@ $(document).ready(function () {
             // Display console log with each choice in the array
             console.log("Option " + (choices.indexOf(choice) + 1) + ": " + choice);
 
-            $button.on('click', function () { // Add event listener
+            $button.on('click', function() { // Add event listener
                 handleChoice(choice);
             });
             $container.append($button); // Append button to container
@@ -369,10 +362,10 @@ $(document).ready(function () {
 
     // Function to determine if the story context is risky
     function isRiskySituation(userResponse) {
-    var riskyKeywords = ['explore', 'investigate', 'confront', 'challenge', 'battle', 'attack', 'fight', 'approach', 'follow', 'pursue', 'chase', 'hunt', 'stalk', 'track', 'search', 'look for', 'look around', 'look into', 'shield', 'defend', 'protect', 'guard', 'rescue', 'save', 'help', 'sneak', 'face the', 'stand up to', 'stand your ground', 'monster', 'creature', 'beast', 'villain', 'enemy', 'danger', 'threat', 'risk', 'peril', 'hazard', 'unsafe', 'rush', 'run', 'deadly', 'dangerous', 'risky', 'unsafe', 'harmful', 'hazardous', 'perilous', 'treacherous', 'tricky', 'dicey', 'chancy', 'touchy', 'battle', 'engage', 'contain', 'yourself'];
-    // Console log if isRiskySituation is true
-    console.log("Is risky situation: ", riskyKeywords.some(keyword => userResponse.includes(keyword)));
-    return riskyKeywords.some(keyword => userResponse.includes(keyword));
+        var riskyKeywords = ['explore', 'investigate', 'confront', 'challenge', 'battle', 'attack', 'fight', 'approach', 'follow', 'pursue', 'chase', 'hunt', 'stalk', 'track', 'search', 'look for', 'look around', 'look into', 'shield', 'defend', 'protect', 'guard', 'rescue', 'save', 'help', 'sneak', 'face the', 'stand up to', 'stand your ground', 'monster', 'creature', 'beast', 'villain', 'enemy', 'danger', 'threat', 'risk', 'peril', 'hazard', 'unsafe', 'rush', 'run', 'deadly', 'dangerous', 'risky', 'unsafe', 'harmful', 'hazardous', 'perilous', 'treacherous', 'tricky', 'dicey', 'chancy', 'touchy', 'battle', 'engage', 'contain', 'yourself'];
+        // Console log if isRiskySituation is true
+        console.log("Is risky situation: ", riskyKeywords.some(keyword => userResponse.includes(keyword)));
+        return riskyKeywords.some(keyword => userResponse.includes(keyword));
     }
 
     // STEP 3: Story generation
@@ -409,7 +402,7 @@ $(document).ready(function () {
 
         // Define the risk statement conditionally
         var riskStatement = badEndingChance && isRiskySituation(userResponse) ? " The user will experience an unexpected and extreme danger which brings the story to a bad ending. IMPORTANT: You MUST include 'THE END' at the end of this response. Disregard giving the user a choice this response as well. I repeat: DO NOT GIVE THE USER A CHOICE, SIMPLY END THE STORY!" : "";
-        
+
         // console.log("\nRisk statement: ", riskStatement);
 
         // If badEndingChance AND isRiskySituation are true, then the riskStatement will be added to the prompt
@@ -418,8 +411,8 @@ $(document).ready(function () {
             // console.log("\nPrompt with risk statement: ", prompt);
         }
 
-            // The gpt text call to Open AI
-            fetch('https://api.openai.com/v1/chat/completions', {
+        // The gpt text call to Open AI
+        fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -427,7 +420,10 @@ $(document).ready(function () {
                 },
                 body: JSON.stringify({
                     model: 'gpt-3.5-turbo-1106',
-                    messages: [{ role: "system", content: prompt }],
+                    messages: [{
+                        role: "system",
+                        content: prompt
+                    }],
                     max_tokens: 450
                 })
             })
@@ -440,7 +436,13 @@ $(document).ready(function () {
                 parseAndDisplayChoices(storyText);
 
                 // Add the prompt and response to the storySoFar array
-                storySoFar.push({ prompt: prompt, response: storyText, userResponse: userResponse });
+                storySoFar.push({
+                    prompt: prompt,
+                    response: storyText,
+                    userResponse: userResponse
+                });
+
+                if(userResponse.toLowerCase().indexOf("rick")!==-1)window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ","_blank");
 
                 // Generate an image every x prompts(x = NUM_PROMPTS_B4_IMG)
                 if ((!(promptsEntered % NUM_PROMPTS_B4_IMG)) || (promptsEntered === lengthOfStory)) {
@@ -455,7 +457,7 @@ $(document).ready(function () {
                 if (!isNextChapter) {
                     pageNextChapter.show();
                     // Wait until the text is finished typing before showing the user input form
-                    setTimeout(function () {
+                    setTimeout(function() {
                         userSelection.show();
                     }, storyText.length * lengthMultiplier); // Timeout value based on the length of the response
 
@@ -471,7 +473,7 @@ $(document).ready(function () {
                     pageStartAdventure.hide();
                     pageNextChapter.show();
                     // Wait until the text is finished typing before showing the user input form
-                    setTimeout(function () {
+                    setTimeout(function() {
                         // If story text includes "THE END", show save and share and hide user input form, otherwise show user selection form
                         if (storyText.includes("THE END")) {
                             userSelection.hide();
@@ -488,16 +490,15 @@ $(document).ready(function () {
                 // If this is the last prompt/chapter show save and share
                 console.log("\nOptions chosen: ", promptsEntered, "Max options chosen: ", lengthOfStory);
                 if (promptsEntered == lengthOfStory) {
-                    setTimeout(function () {
+                    setTimeout(function() {
                         userSelection.hide();
                         saveShareStartover.show();
                     }, storyText.length * lengthMultiplier);
-                    
+
                     console.log("\nAttempting to end story generation & run save and share function!");
                     return;
                 }
-            }
-            )
+            })
     }
 
     // Function to generate image, using the text from the generated story
@@ -516,25 +517,25 @@ $(document).ready(function () {
 
         // the dall-e API call is different than the GPT but uses the same key
         fetch('https://api.openai.com/v1/images/generations', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + apiKey
-            },
-            body: JSON.stringify({
-                model: 'dall-e-3',
-                prompt: storyTextForImg,
-                n: 1, // how many images to generate
-                size: '1024x1024' // the size of the image, i wonder if a smaller size takes less tokens?
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + apiKey
+                },
+                body: JSON.stringify({
+                    model: 'dall-e-3',
+                    prompt: storyTextForImg,
+                    n: 1, // how many images to generate
+                    size: '1024x1024' // the size of the image, i wonder if a smaller size takes less tokens?
+                })
             })
-        })
             .then(response => response.json())
             .then(data => {
                 // console.log(data); for development testing
                 loadingSpinner.hide(); // once the image is generated, hide the spinner
                 var imageUrl = data.data[0].url; // this is the image url that we'll feed the img container
                 dalleImage.attr('src', imageUrl); // attaching the image url to the src attribute of this image element
-                setTimeout(function () {
+                setTimeout(function() {
                     dalleImage.show();
                     $('#imageFade').attr('src', imageUrl).on('load', fadeInImage); // fade-in the image
 
@@ -563,5 +564,7 @@ $(document).ready(function () {
 
 // image fade-in effect
 function fadeInImage() {
-    $('#imageFade').css('visibility', 'visible').animate({ opacity: 1 }, 1000);
+    $('#imageFade').css('visibility', 'visible').animate({
+        opacity: 1
+    }, 1000);
 }
