@@ -161,7 +161,7 @@ label[for="inputLength"] {
   padding-top: 2px;
 }
 #submit-preferences:hover {
-  background-color: rgb(78, 61, 200);
+  background-color:rgb(255, 55, 55);
   color: white;
 }
 
@@ -470,4 +470,61 @@ img {
   position: fixed;
   bottom: 0;
   left: 0;
+}
+
+.dropdown {
+  background-color: #f0f0f0; /* Light grey background */
+  color: #333; /* Dark text color */
+  padding: 8px 12px; /* Padding for some space inside the dropdown */
+  border: 1px solid #ccc; /* Light grey border */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 16px; /* Adjust to match your theme */
+  -webkit-appearance: none; /* Removes default arrow for Webkit browsers */
+  -moz-appearance: none; /* Removes default arrow for Mozilla browsers */
+  background-image: linear-gradient(45deg, transparent 50%, #333 50%), linear-gradient(-45deg, transparent 50%, #333 50%);
+  background-position: right 15px center, right 10px center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+/* For Internet Explorer */
+.dropdown::-ms-expand {
+  display: none;
+}
+
+.dropdown:focus {
+  outline: none; /* Removes the default focus outline */
+  border-color: #666; /* Darker border on focus */
+}
+
+.dropdown:hover {
+  background-color: #e9e9e9; /* Slightly darker background on hover */
+}
+
+.dropdown:active {
+  background-color: #ddd; /* Even darker background when active */
+}
+
+#inputName {
+  background-color: #f0f0f0; /* Light grey background, adjust as needed */
+  color: #333; /* Dark text color, adjust to match your theme */
+  padding: 8px 12px; /* Padding for space inside the input */
+  border: 1px solid #ccc; /* Light grey border, adjust as needed */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 16px; /* Font size, adjust to match your theme */
+  width: 100%; /* Full width to fit container */
+  box-sizing: border-box; /* Makes sure padding doesn't affect overall width */
+}
+
+#inputName:focus {
+  outline: none; /* Removes the default focus outline */
+  border-color: #666; /* Darker border on focus, adjust as needed */
+}
+
+#inputName:hover {
+  background-color: #e9e9e9; /* Slightly darker background on hover */
+}
+
+#inputName:active, #inputName:focus {
+  background-color: #ddd; /* Even darker background when active/focused */
 }
