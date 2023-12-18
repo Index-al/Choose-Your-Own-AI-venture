@@ -375,24 +375,25 @@ $(document).ready(function() {
         console.log("\n----------------------------------------\n");
         console.log("\nAttempting to generate story text!");
         dalleImage.hide();
+      
+        // Extract the last 5 entries from the storySoFar array to determine the story context
+        var recentStorySegments = storySoFar.slice(-5);
 
-        // Concatenate prompts and responses from storySoFar array
-        var fullStory = "";
-        for (var i = 0; i < storySoFar.length; i++) {
-            fullStory += storySoFar[i].prompt + ' ' + storySoFar[i].response + ' ';
-        }
+        // Concat the story context into a single string
+        var storyContext = recentStorySegments.map(segment => segment.response).join(' ');
 
-        // Append the current user response to the concatenated story
-        fullStory += 'The user chose to: ' + userResponse + '. ';
+        // Append the user's response to the story context
+        storyContext += 'The user chose to: ' + userResponse + '. ';
+
 
         // Define the prompt based on whether it's the initial story or a subsequent chapter
         var prompt = isNextChapter ?
-            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${fullStory}. IMPORTANT: Generate between 50 and 100 words before giving the user a choice in EXACTLY the following format: "Do you [run away] or [approach the figure]?" The user's options MUST be in brackets.` :
-            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. IMPORTANT: Make it about 100 words before giving the user a choice in exactly the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" ${fullStory}`;
-
-        // Set up for the last prompt of the story    
+            `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${storyContext}. IMPORTANT: Generate between 50 and 100 words before giving the user a choice in the following format: "Do you [run away] or [approach the figure]?" Make sure the options are relevant to the story! The user's options MUST be in brackets.` :
+            `You are generating a choose-your-own-adventure style story for the user. Use present-tense. The user's name is ${characterName} and they are a ${characterJob}. The genre of this particular story will be ${storyGenre} and the setting is ${storySetting}. Make sure it's a second-person creative narrative. Use popular story-telling elements such as a climax, conflict, dramatic twist(s), resolution, etc. IMPORTANT: Make it about 100 words before giving the user a choice in the following format: "You are walking down a dark alley when you see a shadowy figure. Do you [run away] or [approach the figure]?" Make sure the options make sense for the current story! Story context: ${storyContext}`;
+        
+      // Set up for the last prompt of the story    
         if (promptsEntered === lengthOfStory) {
-            prompt = `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}".  Make sure to use the present tense. Here is the story so far: ${fullStory}. Continue the story from here. This will be the final part of the story! Make sure to generate a grand finale ending! IMPORTANT: Do not go over 200 words before coming to a conclusion. Remember the genre of the story is ${storyGenre}. Always end the story with "THE END".`;
+            prompt = `The user chose to: ${userResponse}. Repeat their choice to them in the following format: "You choose to ${userResponse}".  Make sure to use the present tense. Here is the story so far: ${storyContext}. Continue the story from here. This will be the final part of the story! Make sure to generate a satisfying grand finale ending! IMPORTANT: Do not go over 200 words before coming to a conclusion. Remember the genre of the story is ${storyGenre}. Always end the story with "THE END".`;
             console.log("Attempting to generate the grand finale ending!");
         }
 
