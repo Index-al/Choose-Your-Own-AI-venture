@@ -380,15 +380,6 @@ $(document).ready(function () {
         // Append the user's response to the story context
         storyContext += 'The user chose to: ' + userResponse + '. ';
 
-        // // Concatenate prompts and responses from storySoFar array
-        // var fullStory = "";
-        // for (var i = 0; i < storySoFar.length; i++) {
-        //     fullStory += storySoFar[i].prompt + ' ' + storySoFar[i].response + ' ';
-        // }
-
-        // // Append the current user response to the concatenated story
-        // fullStory += 'The user chose to: ' + userResponse + '. ';
-
         // Define the prompt based on whether it's the initial story or a subsequent chapter
         var prompt = isNextChapter ?
             `Repeat their choice to them in the following format: "You choose to ${userResponse}". Continue the story. ${storyContext}. IMPORTANT: Generate between 50 and 100 words before giving the user a choice in the following format: "Do you [run away] or [approach the figure]?" Make sure the options are relevant to the story! The user's options MUST be in brackets.` :
