@@ -302,7 +302,7 @@ img {
     padding: 10px;
     font-weight: 600;
     font-size: 1.4rem;
-    white-space: normal; /* Allow the text to wrap */
+    white-space: normal; /* Allow the text to wrap if it's long */
     line-height: 1.2;
   }
 
@@ -311,7 +311,7 @@ img {
   color: white;
 }
   
-/* Show/hide form button */
+/* Show/hide choice form button */
 /* Should be only text, minimal, partial transparency */
 .show-form {
   background-color: transparent;
@@ -374,11 +374,11 @@ img {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #003366; /* Dark blue */
+  background: #003366; 
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #002244; /* A darker shade of blue */
+  background: #002244; 
 }
 
 
@@ -453,7 +453,7 @@ img {
 }
 
 /* API reset button */
-/* Should be very minimal barely visible and always display in the bottom left corner */
+/* Should be barely visible */
 .reset-api {
   background-color: transparent;
   border: none;
@@ -473,12 +473,12 @@ img {
 }
 
 .dropdown {
-  background-color: #f0f0f0; /* Light grey background */
-  color: #333; /* Dark text color */
-  padding: 8px 12px; /* Padding for some space inside the dropdown */
-  border: 1px solid #ccc; /* Light grey border */
-  border-radius: 4px; /* Rounded corners */
-  font-size: 16px; /* Adjust to match your theme */
+  background-color: #f0f0f0; 
+  color: #333; 
+  padding: 8px 12px; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  font-size: 16px; 
   -webkit-appearance: none; /* Removes default arrow for Webkit browsers */
   -moz-appearance: none; /* Removes default arrow for Mozilla browsers */
   background-image: linear-gradient(45deg, transparent 50%, #333 50%), linear-gradient(-45deg, transparent 50%, #333 50%);
@@ -493,38 +493,37 @@ img {
 }
 
 .dropdown:focus {
-  outline: none; /* Removes the default focus outline */
-  border-color: #666; /* Darker border on focus */
+  outline: none; 
+  border-color: #666; 
 }
 
 .dropdown:hover {
-  background-color: #e9e9e9; /* Slightly darker background on hover */
+  background-color: #e9e9e9; 
 }
-
 .dropdown:active {
-  background-color: #ddd; /* Even darker background when active */
+  background-color: #ddd; 
 }
 
 #inputName {
-  background-color: #f0f0f0; /* Light grey background, adjust as needed */
-  color: #333; /* Dark text color, adjust to match your theme */
-  padding: 8px 12px; /* Padding for space inside the input */
-  border: 1px solid #ccc; /* Light grey border, adjust as needed */
-  border-radius: 4px; /* Rounded corners */
-  font-size: 16px; /* Font size, adjust to match your theme */
-  width: 100%; /* Full width to fit container */
-  box-sizing: border-box; /* Makes sure padding doesn't affect overall width */
+  background-color: #f0f0f0; 
+  color: #333; 
+  padding: 8px 12px; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  font-size: 16px; 
+  width: 100%; 
+  box-sizing: border-box; 
 }
 
 #inputName:focus {
-  outline: none; /* Removes the default focus outline */
-  border-color: #666; /* Darker border on focus, adjust as needed */
+  outline: none; 
+  border-color: #666; 
 }
 
 #inputName:hover {
-  background-color: #e9e9e9; /* Slightly darker background on hover */
+  background-color: #e9e9e9; 
 }
 
 #inputName:active, #inputName:focus {
-  background-color: #ddd; /* Even darker background when active/focused */
+  background-color: #ddd; 
 }
